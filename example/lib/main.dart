@@ -30,7 +30,7 @@ class Home extends StatelessWidget {
           onPressed: () {
             Routes.compass.navigate(
               context,
-              "/secondPage",
+              "/secondPage1",
               args: SecondPageArgs('Hey there'),
             );
           },
@@ -45,6 +45,8 @@ class SecondPageArgs extends BaseArguments {
 
   SecondPageArgs(this.text) : assert(text != null);
 }
+
+class Fake extends BaseArguments {}
 
 class SecondPage extends StatefulWidget {
   @override
