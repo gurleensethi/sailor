@@ -1,7 +1,7 @@
 # sailor
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-[![pub_package](https://img.shields.io/pub/v/sailor.svg)](https://pub.dev/packages/sailor)
+[![pub_package](https://img.shields.io/pub/vpre/sailor.svg)](https://pub.dev/packages/sailor)
 
 A Flutter package for easy navigation management.
 
