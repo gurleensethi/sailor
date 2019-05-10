@@ -13,6 +13,9 @@ class App extends StatelessWidget {
       title: 'Compass Example',
       home: Home(),
       onGenerateRoute: Routes.sailor.generator(),
+      navigatorObservers: [
+        SailorLoggingObserver(),
+      ],
     );
   }
 }
