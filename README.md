@@ -128,7 +128,7 @@ class App extends StatelessWidget {
 
 Once added, start navigating in your app and check the logs. You will see something like this.
 ```
-flutter: [Sailor] Route Pushed: (New Route='/', Previous Route='null', Arguments=null)
-flutter: [Sailor] Route Pushed: (New Route='/secondPage', Previous Route='/', Arguments=Instance of 'SecondPageArgs')
-flutter: [Sailor] Route Popped: (New Route='/secondPage', Previous Route='/', Arguments=Instance of 'SecondPageArgs')
+flutter: [Sailor] Route Pushed: (Pushed Route='/', Previous Route='null', New Route Args=null, Previous Route Args=null)
+flutter: [Sailor] Route Pushed: (Pushed Route='/secondPage', Previous Route='/', New Route Args=Instance of 'SecondPageArgs', Previous Route Args=null)
+flutter: [Sailor] Route Popped: (New Route='/', Popped Route='/secondPage', New Route Args=null, Previous Route Args=Instance of 'SecondPageArgs')
 ```

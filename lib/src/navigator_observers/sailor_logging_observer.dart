@@ -4,9 +4,10 @@ class SailorLoggingObserver extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
     print("[Sailor] Route Pushed: "
-        "(New Route='${route?.settings?.name}', "
+        "(Pushed Route='${route?.settings?.name}', "
         "Previous Route='${previousRoute?.settings?.name}', "
-        "Arguments=${route?.settings?.arguments}"
+        "New Route Args=${route?.settings?.arguments}, "
+        "Previous Route Args=${previousRoute?.settings?.arguments}"
         ")");
   }
 
@@ -15,9 +16,10 @@ class SailorLoggingObserver extends NavigatorObserver {
     super.didPop(route, previousRoute);
 
     print("[Sailor] Route Popped: "
-        "(New Route='${route?.settings?.name}', "
-        "Previous Route='${previousRoute?.settings?.name}', "
-        "Arguments=${route?.settings?.arguments}"
+        "(New Route='${previousRoute?.settings?.name}', "
+        "Popped Route='${route?.settings?.name}', "
+        "New Route Args=${previousRoute?.settings?.arguments}, "
+        "Previous Route Args=${route?.settings?.arguments}"
         ")");
   }
 
