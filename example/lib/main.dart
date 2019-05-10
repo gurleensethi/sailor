@@ -28,7 +28,7 @@ class Home extends StatelessWidget {
         child: RaisedButton(
           child: Text('Open New Page'),
           onPressed: () async {
-            final response = await Routes.compass.navigate<String>(
+            final response = await Routes.compass.navigate<bool>(
               context,
               "/secondPage",
               args: SecondPageArgs('Hey there'),
@@ -59,8 +59,6 @@ class _SecondPageState extends State<SecondPage> {
   @override
   Widget build(BuildContext context) {
     final args = Compass.arguments<SecondPageArgs>(context);
-    print("here are arguments");
-    print(args);
 
     return Scaffold(
       appBar: AppBar(
@@ -88,11 +86,12 @@ class Routes {
   static final compass = Compass();
 
   static void createRoutes() {
-    compass.addRoute(CompassRoute(
-      name: "/secondPage",
-      builder: (context, args) {
-        return SecondPage();
-      },
-    ));
+    compass
+      ..addRoute(CompassRoute(
+        name: "/secondPage",
+        builder: (context, args) {
+          return SecondPage();
+        },
+      ));
   }
 }
