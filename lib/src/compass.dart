@@ -2,6 +2,8 @@ import 'package:compass/compass.dart';
 import 'package:compass/src/errors/route_not_found.dart';
 import 'package:flutter/material.dart';
 
+enum NavigationType { push, pushReplace, pushAndRemoveUntil }
+
 class Compass {
   /// Store all the mappings of route names and corresponding CompassRoute
   /// Used to generate routes
@@ -29,13 +31,20 @@ class Compass {
     _routeNameMappings[route.name] = route;
   }
 
-  void navigate(
+  Future<T> navigate<T>(
     BuildContext context,
     String name, {
     BaseArguments args,
+    NavigationType navigationType = NavigationType.push,
+    dynamic result,
+    bool Function(Route<dynamic> route) removeUntilPredicate,
   }) {
     assert(context != null);
     assert(name != null);
+    assert(navigationType != null);
+    if (navigationType == NavigationType.pushAndRemoveUntil) {
+      assert(removeUntilPredicate != null);
+    }
 
     // If the route is not registered throw an error
     // Make sure to use the correct name while calling navigate.
@@ -43,14 +52,56 @@ class Compass {
       throw RouteNotFoundError(name: name);
     }
 
-    Navigator.of(context).pushNamed(name, arguments: args);
+    return _navigate(
+      context,
+      name,
+      args,
+      navigationType,
+      result,
+      removeUntilPredicate,
+    ).then((value) => value as T);
   }
 
+  Future<dynamic> _navigate(
+    BuildContext context,
+    String name,
+    BaseArguments args,
+    NavigationType navigationType,
+    dynamic result,
+    bool Function(Route<dynamic> route) removeUntilPredicate,
+  ) {
+    switch (navigationType) {
+      case NavigationType.push:
+        {
+          return Navigator.of(context).pushNamed(name, arguments: args);
+        }
+      case NavigationType.pushReplace:
+        {
+          return Navigator.of(context).pushReplacementNamed(
+            name,
+            result: result,
+            arguments: args,
+          );
+        }
+      case NavigationType.pushAndRemoveUntil:
+        {
+          return Navigator.of(context).pushNamedAndRemoveUntil(
+            name,
+            removeUntilPredicate,
+            arguments: args,
+          );
+        }
+    }
+
+    return null;
+  }
+
+  /// Generates the [RouteFactory] which builds a [Route] on request.
+  ///
+  /// These routes are built using the [CompassRoute]s provided using
+  /// [addRoute] method.
   RouteFactory generator() {
     return (settings) {
-      print("Requested Path: ${settings.name}");
-      print(settings.arguments);
-
       return MaterialPageRoute(
         settings: settings,
         builder: (BuildContext context) {

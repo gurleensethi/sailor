@@ -1,6 +1,6 @@
 # compass
 
-A new Flutter package project.
+A Flutter package for easy navigation management.
 
 ## Roadmap
 - [ ] Core Navigation Features

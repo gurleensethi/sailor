@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:compass/compass.dart';
 
-void main() {
+void main() async {
   Routes.createRoutes();
   runApp(App());
 }
@@ -27,12 +27,14 @@ class Home extends StatelessWidget {
       body: Center(
         child: RaisedButton(
           child: Text('Open New Page'),
-          onPressed: () {
-            Routes.compass.navigate(
+          onPressed: () async {
+            final response = await Routes.compass.navigate<String>(
               context,
-              "/secondPage1",
+              "/secondPage",
               args: SecondPageArgs('Hey there'),
             );
+
+            print("Response from SecondPage: $response");
           },
         ),
       ),
@@ -65,7 +67,18 @@ class _SecondPageState extends State<SecondPage> {
         title: Text('Compass Example'),
       ),
       body: Center(
-        child: Text(args?.text ?? 'Second Page'),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(args?.text ?? 'Second Page'),
+            RaisedButton(
+              child: Text('Close Page'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
