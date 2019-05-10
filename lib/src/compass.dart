@@ -96,6 +96,10 @@ class Compass {
     return null;
   }
 
+  bool pop(BuildContext context, {dynamic result}) {
+    return Navigator.of(context).pop(result);
+  }
+
   /// Generates the [RouteFactory] which builds a [Route] on request.
   ///
   /// These routes are built using the [CompassRoute]s provided using
