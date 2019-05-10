@@ -107,8 +107,8 @@ class SecondPage extends StatelessWidget {
 ```
 
 ## Log Navigation
-Use `SailorLogginObserver` to log the `push`/`pop` navigation inside the application.
-Add the `SailorLogginObserver` to the `navigatorObservers` list inside your `MaterialApp`. 
+Use `SailorLoggingObserver` to log the `push`/`pop` navigation inside the application.
+Add the `SailorLoggingObserver` to the `navigatorObservers` list inside your `MaterialApp`. 
 
 ```dart
 class App extends StatelessWidget {
