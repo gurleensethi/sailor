@@ -1,4 +1,5 @@
 # sailor
+![anchor_image](https://raw.githubusercontent.com/gurleensethi/sailor/master/images/anchor-icon.png)
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 [![pub_package](https://img.shields.io/pub/vpre/sailor.svg)](https://pub.dev/packages/sailor)
