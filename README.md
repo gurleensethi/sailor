@@ -1,5 +1,8 @@
 # sailor
 
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![pub_package](https://img.shields.io/pub/v/sailor.svg)]((https://pub.dartlang.org/packages/sailor))
+
 A Flutter package for easy navigation management.
 
 #### Warning: Package is still under development, there might be breaking changes in future.
