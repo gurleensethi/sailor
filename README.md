@@ -105,3 +105,30 @@ class SecondPage extends StatelessWidget {
   }
 }
 ```
+
+## Log Navigation
+Use `SailorLogginObserver` to log the `push`/`pop` navigation inside the application.
+Add the `SailorLogginObserver` to the `navigatorObservers` list inside your `MaterialApp`. 
+
+```dart
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Compass Example',
+      home: Home(),
+      onGenerateRoute: Routes.sailor.generator(),
+      navigatorObservers: [
+        SailorLoggingObserver(),
+      ],
+    );
+  }
+}
+```
+
+Once added, start navigating in your app and check the logs. You will see something like this.
+```
+flutter: [Sailor] Route Pushed: (New Route='/', Previous Route='null', Arguments=null)
+flutter: [Sailor] Route Pushed: (New Route='/secondPage', Previous Route='/', Arguments=Instance of 'SecondPageArgs')
+flutter: [Sailor] Route Popped: (New Route='/secondPage', Previous Route='/', Arguments=Instance of 'SecondPageArgs')
+```
