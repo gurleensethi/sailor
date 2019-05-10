@@ -48,14 +48,7 @@ class SecondPageArgs extends BaseArguments {
   SecondPageArgs(this.text) : assert(text != null);
 }
 
-class Fake extends BaseArguments {}
-
-class SecondPage extends StatefulWidget {
-  @override
-  _SecondPageState createState() => _SecondPageState();
-}
-
-class _SecondPageState extends State<SecondPage> {
+class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = Sailor.arguments<SecondPageArgs>(context);

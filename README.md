@@ -29,7 +29,7 @@ class Routes {
 }
 ```
 
-* Make to create rotues before starting the application.
+* Make sure to create routes before starting the application.
 
 ```dart
 void main() async {
@@ -57,4 +57,48 @@ class App extends StatelessWidget {
 
 ```dart
 Routes.sailor.navigate(context, "/secondPage");
+```
+
+## Passing Arguments
+`Sailor` allows you to pass arguments to the page that you are navigating to.
+
+* Create a class that extends from `BaseArguments`.
+
+```dart
+class SecondPageArgs extends BaseArguments {
+  final String text;
+
+  SecondPageArgs(this.text);
+}
+```
+
+* When calling the `navigate` method pass these arguments.
+
+```dart
+
+final response = Routes.sailor.navigate(
+  context,
+  "/secondPage",
+  args: SecondPageArgs('Hey there'),
+);
+```
+
+* When in the SecondPage, use `Sailor.arguments` to get the passed arguments.
+
+```dart
+class SecondPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final args = Sailor.arguments<SecondPageArgs>(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Compass Example'),
+      ),
+      body: Center(
+        child: Text(args.text),
+      ),
+    );
+  }
+}
 ```
