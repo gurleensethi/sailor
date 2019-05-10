@@ -1,4 +1,4 @@
-# compass
+# sailor
 
 A Flutter package for easy navigation management.
 
