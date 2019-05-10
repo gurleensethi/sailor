@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:compass/compass.dart';
+import 'package:sailor/sailor.dart';
 
 void main() async {
   Routes.createRoutes();
@@ -12,7 +12,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Compass Example',
       home: Home(),
-      onGenerateRoute: Routes.compass.generator(),
+      onGenerateRoute: Routes.sailor.generator(),
     );
   }
 }
@@ -28,7 +28,7 @@ class Home extends StatelessWidget {
         child: RaisedButton(
           child: Text('Open New Page'),
           onPressed: () async {
-            final response = await Routes.compass.navigate<bool>(
+            final response = await Routes.sailor.navigate<bool>(
               context,
               "/secondPage",
               args: SecondPageArgs('Hey there'),
@@ -58,7 +58,7 @@ class SecondPage extends StatefulWidget {
 class _SecondPageState extends State<SecondPage> {
   @override
   Widget build(BuildContext context) {
-    final args = Compass.arguments<SecondPageArgs>(context);
+    final args = Sailor.arguments<SecondPageArgs>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -83,11 +83,11 @@ class _SecondPageState extends State<SecondPage> {
 }
 
 class Routes {
-  static final compass = Compass();
+  static final sailor = Sailor();
 
   static void createRoutes() {
-    compass
-      ..addRoute(CompassRoute(
+    sailor
+      ..addRoute(SailorRoute(
         name: "/secondPage",
         builder: (context, args) {
           return SecondPage();

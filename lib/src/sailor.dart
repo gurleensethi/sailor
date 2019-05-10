@@ -1,13 +1,14 @@
-import 'package:compass/compass.dart';
-import 'package:compass/src/errors/route_not_found.dart';
+import 'package:sailor/src/errors/route_not_found.dart';
 import 'package:flutter/material.dart';
+import 'package:sailor/src/models/base_arguments.dart';
+import 'package:sailor/src/models/sailor_route.dart';
 
 enum NavigationType { push, pushReplace, pushAndRemoveUntil }
 
-class Compass {
+class Sailor {
   /// Store all the mappings of route names and corresponding CompassRoute
   /// Used to generate routes
-  Map<String, CompassRoute> _routeNameMappings = {};
+  Map<String, SailorRoute> _routeNameMappings = {};
 
   /// Retrieves the arguments passed in when calling the [navigate] function.
   ///
@@ -21,13 +22,13 @@ class Compass {
     return ModalRoute.of(context).settings.arguments as T;
   }
 
-  /// Add a new route to [Compass].
+  /// Add a new route to [Sailor].
   ///
   /// Route is stored in [_routeNameMappings].
   ///
   /// If a route is provided with a name that was previously added, it will
   /// override the old one.
-  void addRoute(CompassRoute route) {
+  void addRoute(SailorRoute route) {
     _routeNameMappings[route.name] = route;
   }
 

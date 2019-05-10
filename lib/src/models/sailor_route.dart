@@ -1,15 +1,15 @@
-import 'package:compass/src/models/base_arguments.dart';
+import 'package:sailor/src/models/base_arguments.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
-typedef CompassRouteBuilder = Widget Function(
+typedef SailorRouteBuilder = Widget Function(
     BuildContext context, BaseArguments args);
 
-class CompassRoute {
+class SailorRoute {
   final String name;
-  final CompassRouteBuilder builder;
+  final SailorRouteBuilder builder;
 
-  CompassRoute({
+  SailorRoute({
     @required this.name,
     @required this.builder,
   })  : assert(name != null),
