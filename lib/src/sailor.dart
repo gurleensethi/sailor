@@ -32,6 +32,19 @@ class Sailor {
     _routeNameMappings[route.name] = route;
   }
 
+  /// Function used to navigate pages.
+  ///
+  /// [name] is the route name that was registered using [addRoute].
+  ///
+  /// [args] are optional arguments that can be passed to the next page.
+  /// To retrieve these arguments use [arguments] method on [Sailor].
+  ///
+  /// [navigationType] can be specified to choose from various navigation
+  /// strategies such as [NavigationType.push], [NavigationType.pushReplace],
+  /// [NavigationType.pushAndRemoveUntil].
+  ///
+  /// [removeUntilPredicate] should be provided is using
+  /// [NavigationType.pushAndRemoveUntil] strategy.
   Future<T> navigate<T>(
     BuildContext context,
     String name, {
@@ -63,6 +76,19 @@ class Sailor {
     ).then((value) => value as T);
   }
 
+  /// Actual navigation is delegated by [navigate] method to this method.
+  ///
+  /// [name] is the route name that was registered using [addRoute].
+  ///
+  /// [args] are optional arguments that can be passed to the next page.
+  /// To retrieve these arguments use [arguments] method on [Sailor].
+  ///
+  /// [navigationType] can be specified to choose from various navigation
+  /// strategies such as [NavigationType.push], [NavigationType.pushReplace],
+  /// [NavigationType.pushAndRemoveUntil].
+  ///
+  /// [removeUntilPredicate] should be provided is using
+  /// [NavigationType.pushAndRemoveUntil] strategy.
   Future<dynamic> _navigate(
     BuildContext context,
     String name,
@@ -97,6 +123,7 @@ class Sailor {
     return null;
   }
 
+  /// Delegation for [Navigator.pop].
   bool pop(BuildContext context, {dynamic result}) {
     return Navigator.of(context).pop(result);
   }
