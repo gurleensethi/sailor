@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sailor/src/models/base_arguments.dart';
 import 'package:sailor/src/models/sailor_route.dart';
 
-enum NavigationType { push, pushReplace, pushAndRemoveUntil }
+enum NavigationType { push, pushReplace, pushAndRemoveUntil, popAndPushNamed }
 
 class Sailor {
   /// Store all the mappings of route names and corresponding CompassRoute
@@ -116,6 +116,14 @@ class Sailor {
             name,
             removeUntilPredicate,
             arguments: args,
+          );
+        }
+      case NavigationType.popAndPushNamed:
+        {
+          return Navigator.of(context).popAndPushNamed(
+            name,
+            arguments: args,
+            result: result,
           );
         }
     }
