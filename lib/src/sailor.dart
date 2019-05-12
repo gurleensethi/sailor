@@ -74,8 +74,8 @@ class Sailor {
     // If the route is not registered throw an error
     // Make sure to use the correct name while calling navigate.
     if (!_routeNameMappings.containsKey(name)) {
-      if (this.options.handlePageNotFound) {
-        return Navigator.of(context).push(
+      if (this.options.handleNameNotFoundUI) {
+        Navigator.of(context).push(
           MaterialPageRoute(builder: (BuildContext context) {
             return PageNotFound(
               routeName: name,
@@ -84,6 +84,8 @@ class Sailor {
             );
           }),
         );
+
+        throw RouteNotFoundError(name: name);
       } else {
         throw RouteNotFoundError(name: name);
       }
@@ -165,11 +167,28 @@ class Sailor {
   /// [addRoute] method.
   RouteFactory generator() {
     return (settings) {
+      final route = _routeNameMappings[settings.name];
+
+      if (route == null) return null;
+
       return MaterialPageRoute(
         settings: settings,
         builder: (BuildContext context) {
-          return _routeNameMappings[settings.name]
-              .builder(context, settings.arguments);
+          return route.builder(context, settings.arguments);
+        },
+      );
+    };
+  }
+
+  static RouteFactory unknownRouteGenerator() {
+    return (settings) {
+      return MaterialPageRoute(
+        settings: settings,
+        builder: (BuildContext context) {
+          return PageNotFound(
+            routeName: settings.name,
+            args: settings.arguments,
+          );
         },
       );
     };

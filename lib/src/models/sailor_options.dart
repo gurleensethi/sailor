@@ -1,7 +1,7 @@
 class SailorOptions {
-  final bool handlePageNotFound;
+  final bool handleNameNotFoundUI;
 
   const SailorOptions({
-    this.handlePageNotFound = false,
-  }) : assert(handlePageNotFound != null);
+    this.handleNameNotFoundUI = false,
+  }) : assert(handleNameNotFoundUI != null);
 }

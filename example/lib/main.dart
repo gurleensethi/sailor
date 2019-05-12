@@ -80,7 +80,7 @@ class SecondPage extends StatelessWidget {
 class Routes {
   static final sailor = Sailor(
     options: SailorOptions(
-      handlePageNotFound: true,
+      handleNameNotFoundUI: true,
     ),
   );
 
