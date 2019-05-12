@@ -33,7 +33,8 @@ class Home extends StatelessWidget {
           onPressed: () async {
             final response = await Routes.sailor.navigate<bool>(
               context,
-              "/secondPage2",
+              "/secondPage",
+              args: SecondPageArgs('Args From First Page')
             );
 
             print("Response from SecondPage: $response");

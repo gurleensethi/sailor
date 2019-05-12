@@ -43,6 +43,24 @@ class Sailor {
     _routeNameMappings[route.name] = route;
   }
 
+  Future<T> call<T>(
+    BuildContext context,
+    String name, {
+    BaseArguments args,
+    NavigationType navigationType = NavigationType.push,
+    dynamic result,
+    bool Function(Route<dynamic> route) removeUntilPredicate,
+  }) {
+    return navigate<T>(
+      context,
+      name,
+      navigationType: navigationType,
+      result: result,
+      removeUntilPredicate: removeUntilPredicate,
+      args: args,
+    );
+  }
+
   /// Function used to navigate pages.
   ///
   /// [name] is the route name that was registered using [addRoute].
