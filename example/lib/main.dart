@@ -33,8 +33,7 @@ class Home extends StatelessWidget {
           onPressed: () async {
             final response = await Routes.sailor.navigate<bool>(
               context,
-              "/secondPage",
-              args: SecondPageArgs('Hey there'),
+              "/secondPage2",
             );
 
             print("Response from SecondPage: $response");
@@ -79,7 +78,11 @@ class SecondPage extends StatelessWidget {
 }
 
 class Routes {
-  static final sailor = Sailor();
+  static final sailor = Sailor(
+    options: SailorOptions(
+      handlePageNotFound: true,
+    ),
+  );
 
   static void createRoutes() {
     sailor

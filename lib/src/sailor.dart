@@ -1,14 +1,25 @@
 import 'package:sailor/src/errors/route_not_found.dart';
 import 'package:flutter/material.dart';
 import 'package:sailor/src/models/base_arguments.dart';
+import 'package:sailor/src/models/sailor_options.dart';
 import 'package:sailor/src/models/sailor_route.dart';
+import 'package:sailor/src/ui/page_not_found.dart';
 
 enum NavigationType { push, pushReplace, pushAndRemoveUntil, popAndPushNamed }
 
 class Sailor {
+  /// Configuration options for [Sailor].
+  ///
+  /// Check out [SailorOptions] for available options.
+  final SailorOptions options;
+
   /// Store all the mappings of route names and corresponding CompassRoute
   /// Used to generate routes
   Map<String, SailorRoute> _routeNameMappings = {};
+
+  Sailor({
+    this.options = const SailorOptions(),
+  }) : assert(options != null);
 
   /// Retrieves the arguments passed in when calling the [navigate] function.
   ///
@@ -63,7 +74,19 @@ class Sailor {
     // If the route is not registered throw an error
     // Make sure to use the correct name while calling navigate.
     if (!_routeNameMappings.containsKey(name)) {
-      throw RouteNotFoundError(name: name);
+      if (this.options.handlePageNotFound) {
+        return Navigator.of(context).push(
+          MaterialPageRoute(builder: (BuildContext context) {
+            return PageNotFound(
+              routeName: name,
+              args: args,
+              navigationType: navigationType,
+            );
+          }),
+        );
+      } else {
+        throw RouteNotFoundError(name: name);
+      }
     }
 
     return _navigate(
