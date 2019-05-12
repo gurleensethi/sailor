@@ -139,3 +139,7 @@ flutter: [Sailor] Route Pushed: (Pushed Route='/', Previous Route='null', New Ro
 flutter: [Sailor] Route Pushed: (Pushed Route='/secondPage', Previous Route='/', New Route Args=Instance of 'SecondPageArgs', Previous Route Args=null)
 flutter: [Sailor] Route Popped: (New Route='/', Popped Route='/secondPage', New Route Args=null, Previous Route Args=Instance of 'SecondPageArgs')
 ```
+
+## Support
+If you face any issue or want a new feature to be added to the package, please [create an issue](https://github.com/gurleensethi/sailor/issues/new). 
+I will be more than happy to resolve your queries.
