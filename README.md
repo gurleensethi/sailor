@@ -63,6 +63,12 @@ class App extends StatelessWidget {
 Routes.sailor.navigate(context, "/secondPage");
 ```
 
+* TIP: `Sailor` is a callable class, so you omit `navigate` and directly call the method.
+
+```dart
+Routes.sailor(context, "/secondPage");
+``` 
+
 ## Passing Arguments
 `Sailor` allows you to pass arguments to the page that you are navigating to.
 
