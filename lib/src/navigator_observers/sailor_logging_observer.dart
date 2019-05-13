@@ -33,4 +33,16 @@ class SailorLoggingObserver extends NavigatorObserver {
         "Arguments=${newRoute?.settings?.arguments}"
         ")");
   }
+
+  @override
+  void didRemove(Route route, Route previousRoute) {
+    super.didRemove(route, previousRoute);
+
+    print("[Sailor] Route Popped: "
+        "(New Route='${previousRoute?.settings?.name}', "
+        "Removed Route='${route?.settings?.name}', "
+        "New Route Args=${previousRoute?.settings?.arguments}, "
+        "Removed Route Args=${route?.settings?.arguments}"
+        ")");
+  }
 }
