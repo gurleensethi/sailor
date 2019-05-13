@@ -85,9 +85,8 @@ class Sailor {
     assert(context != null);
     assert(name != null);
     assert(navigationType != null);
-    if (navigationType == NavigationType.pushAndRemoveUntil) {
-      assert(removeUntilPredicate != null);
-    }
+    assert(navigationType != NavigationType.pushAndRemoveUntil ||
+        removeUntilPredicate != null);
 
     // If the route is not registered throw an error
     // Make sure to use the correct name while calling navigate.
@@ -102,11 +101,8 @@ class Sailor {
             );
           }),
         );
-
-        throw RouteNotFoundError(name: name);
-      } else {
-        throw RouteNotFoundError(name: name);
       }
+      throw RouteNotFoundError(name: name);
     }
 
     return _navigate(
