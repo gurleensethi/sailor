@@ -52,11 +52,8 @@ class Home extends StatelessWidget {
                   RouteArgsPair("/thirdPage", ThirdPageArgs(10)),
                 ]);
 
-                final secondPageResponse = responses[0];
-                final thirdPageResponse = responses[1];
-
-                print("Second Page Response $secondPageResponse");
-                print("Third Page Response $thirdPageResponse");
+                print("Second Page Response ${responses[0]}");
+                print("Third Page Response ${responses[1]}");
               },
             ),
           ],

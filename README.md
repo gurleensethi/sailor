@@ -113,6 +113,20 @@ class SecondPage extends StatelessWidget {
 }
 ```
 
+## Pushing Multiple Routes
+
+Sailor allows you to push multiple pages at the same time and get collected response from all.
+
+```dart
+final responses = await Routes.sailor.navigateMultiple(context, [
+  RouteArgsPair("/secondPage", SecondPageArgs("Multi Page!")),
+  RouteArgsPair("/thirdPage", ThirdPageArgs(10)),
+]);
+
+print("Second Page Response ${responses[0]}");
+print("Third Page Response ${responses[1]}");
+```
+
 ## Log Navigation
 Use `SailorLoggingObserver` to log the `push`/`pop` navigation inside the application.
 Add the `SailorLoggingObserver` to the `navigatorObservers` list inside your `MaterialApp`. 
