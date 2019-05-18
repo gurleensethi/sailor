@@ -121,7 +121,7 @@ class Sailor {
         context,
         routeArgs.name,
         routeArgs.args,
-        // TODO(gurleensehti): Give user the ability to use any type of NavigationType
+        // TODO(gurleensethi): Give user the ability to use any type of NavigationType
         NavigationType.push,
       );
 
@@ -129,7 +129,7 @@ class Sailor {
         context,
         routeArgs.name,
         routeArgs.args,
-        // TODO(gurleensehti): Give user the ability to use any type of NavigationType
+        // TODO(gurleensethi): Give user the ability to use any type of NavigationType
         NavigationType.push,
         null,
         null,
