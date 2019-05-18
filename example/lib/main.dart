@@ -58,13 +58,46 @@ class SecondPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Compass Example'),
+        title: Text('Second Page'),
       ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(args?.text ?? 'Second Page'),
+            RaisedButton(
+              child: Text('Close Page'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ThirdPageArgs extends BaseArguments {
+  final int count;
+
+  ThirdPageArgs(this.count);
+}
+
+class ThirdPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final args = Sailor.arguments<ThirdPageArgs>(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Third Page'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text("Count from args is :${args.count}"),
             RaisedButton(
               child: Text('Close Page'),
               onPressed: () {
@@ -91,6 +124,12 @@ class Routes {
         name: "/secondPage",
         builder: (context, args) {
           return SecondPage();
+        },
+      ))
+      ..addRoute(SailorRoute(
+        name: "/thirdPage",
+        builder: (BuildContext context, BaseArguments args) {
+          return ThirdPage();
         },
       ));
   }

@@ -88,22 +88,7 @@ class Sailor {
     assert(navigationType != NavigationType.pushAndRemoveUntil ||
         removeUntilPredicate != null);
 
-    // If the route is not registered throw an error
-    // Make sure to use the correct name while calling navigate.
-    if (!_routeNameMappings.containsKey(name)) {
-      if (this.options.handleNameNotFoundUI) {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (BuildContext context) {
-            return PageNotFound(
-              routeName: name,
-              args: args,
-              navigationType: navigationType,
-            );
-          }),
-        );
-      }
-      throw RouteNotFoundError(name: name);
-    }
+    _checkAndThrowRouteNotFound(context, name, args, navigationType);
 
     return _navigate(
       context,
@@ -113,6 +98,16 @@ class Sailor {
       result,
       removeUntilPredicate,
     ).then((value) => value as T);
+  }
+
+  void navigateMultiple(
+    BuildContext context,
+    List<String> names,
+    List<BaseArguments> args,
+  ) {
+    assert(names.length != 0);
+    assert(args.length != 0);
+    assert(names.length == args.length);
   }
 
   /// Actual navigation is delegated by [navigate] method to this method.
@@ -168,6 +163,33 @@ class Sailor {
     }
 
     return null;
+  }
+
+  /// If the route is not registered throw an error
+  /// Make sure to use the correct name while calling navigate.
+  void _checkAndThrowRouteNotFound(
+    BuildContext context,
+    String name,
+    BaseArguments args,
+    NavigationType navigationType,
+  ) {
+    assert(context != null);
+    assert(name != null);
+
+    if (!_routeNameMappings.containsKey(name)) {
+      if (this.options.handleNameNotFoundUI) {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (BuildContext context) {
+            return PageNotFound(
+              routeName: name,
+              args: args,
+              navigationType: navigationType,
+            );
+          }),
+        );
+      }
+      throw RouteNotFoundError(name: name);
+    }
   }
 
   /// Delegation for [Navigator.pop].
