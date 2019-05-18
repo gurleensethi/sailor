@@ -25,20 +25,34 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Compass Example'),
+        title: Text('First Page'),
       ),
       body: Center(
-        child: RaisedButton(
-          child: Text('Open New Page'),
-          onPressed: () async {
-            final response = await Routes.sailor.navigate<bool>(
-              context,
-              "/secondPage",
-              args: SecondPageArgs('Args From First Page'),
-            );
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            RaisedButton(
+              child: Text('Open Second Page'),
+              onPressed: () async {
+                final response = await Routes.sailor.navigate<bool>(
+                  context,
+                  "/secondPage",
+                  args: SecondPageArgs('Args From First Page'),
+                );
 
-            print("Response from SecondPage: $response");
-          },
+                print("Response from SecondPage: $response");
+              },
+            ),
+            RaisedButton(
+              child: Text('Open Multi Page (Second and Third)'),
+              onPressed: () async {
+                Routes.sailor.navigateMultiple(context, [
+                  RouteArgsPair("/secondPage2", SecondPageArgs("Multi Page!")),
+                  RouteArgsPair("/thirdPage", ThirdPageArgs(10)),
+                ]);
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -97,7 +111,7 @@ class ThirdPage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("Count from args is :${args.count}"),
+            Text("Count from args is :${args?.count}"),
             RaisedButton(
               child: Text('Close Page'),
               onPressed: () {

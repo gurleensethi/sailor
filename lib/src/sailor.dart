@@ -5,6 +5,8 @@ import 'package:sailor/src/models/sailor_options.dart';
 import 'package:sailor/src/models/sailor_route.dart';
 import 'package:sailor/src/ui/page_not_found.dart';
 
+import 'models/route_args_pair.dart';
+
 enum NavigationType { push, pushReplace, pushAndRemoveUntil, popAndPushNamed }
 
 class Sailor {
@@ -100,14 +102,39 @@ class Sailor {
     ).then((value) => value as T);
   }
 
+  /// Push multiple routes at the same time.
+  ///
+  /// [routeArgsPairs] is a list of [RouteArgsPair]. Each [RouteArgsPair]
+  /// contains the name of a route and its corresponding argument (if any).
   void navigateMultiple(
     BuildContext context,
-    List<String> names,
-    List<BaseArguments> args,
+    List<RouteArgsPair> routeArgsPairs,
   ) {
-    assert(names.length != 0);
-    assert(args.length != 0);
-    assert(names.length == args.length);
+    assert(context != null);
+    assert(routeArgsPairs != null);
+    assert(routeArgsPairs.isNotEmpty);
+
+    // For each route check if it exists.
+    // Push the route.
+    routeArgsPairs.forEach((routeArgs) {
+      _checkAndThrowRouteNotFound(
+        context,
+        routeArgs.name,
+        routeArgs.args,
+        // TODO(gurleensehti): Give user the ability to use any type of NavigationType
+        NavigationType.push,
+      );
+
+      _navigate(
+        context,
+        routeArgs.name,
+        routeArgs.args,
+        // TODO(gurleensehti): Give user the ability to use any type of NavigationType
+        NavigationType.push,
+        null,
+        null,
+      );
+    });
   }
 
   /// Actual navigation is delegated by [navigate] method to this method.
