@@ -1,3 +1,4 @@
-## [0.0.1] - TODO: Add release date.
+## [0.0.4] - 18 May 2019
 
-* TODO: Describe initial release.
+* Launch multiple routes at the same time using `multiNavigate`.
+* Ability to add default arguments when registering routes with `addRoute`.
