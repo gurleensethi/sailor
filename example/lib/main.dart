@@ -46,10 +46,17 @@ class Home extends StatelessWidget {
             RaisedButton(
               child: Text('Open Multi Page (Second and Third)'),
               onPressed: () async {
-                Routes.sailor.navigateMultiple(context, [
-                  RouteArgsPair("/secondPage2", SecondPageArgs("Multi Page!")),
+                final responses =
+                    await Routes.sailor.navigateMultiple(context, [
+                  RouteArgsPair("/secondPage", SecondPageArgs("Multi Page!")),
                   RouteArgsPair("/thirdPage", ThirdPageArgs(10)),
                 ]);
+
+                final secondPageResponse = responses[0];
+                final thirdPageResponse = responses[1];
+
+                print("Second Page Response $secondPageResponse");
+                print("Third Page Response $thirdPageResponse");
               },
             ),
           ],
@@ -115,7 +122,7 @@ class ThirdPage extends StatelessWidget {
             RaisedButton(
               child: Text('Close Page'),
               onPressed: () {
-                Navigator.of(context).pop(true);
+                Navigator.of(context).pop();
               },
             ),
           ],

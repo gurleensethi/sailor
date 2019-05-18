@@ -106,13 +106,15 @@ class Sailor {
   ///
   /// [routeArgsPairs] is a list of [RouteArgsPair]. Each [RouteArgsPair]
   /// contains the name of a route and its corresponding argument (if any).
-  void navigateMultiple(
+  Future<List> navigateMultiple(
     BuildContext context,
     List<RouteArgsPair> routeArgsPairs,
   ) {
     assert(context != null);
     assert(routeArgsPairs != null);
     assert(routeArgsPairs.isNotEmpty);
+
+    final pageResponses = <Future>[];
 
     // For each route check if it exists.
     // Push the route.
@@ -125,7 +127,7 @@ class Sailor {
         NavigationType.push,
       );
 
-      _navigate(
+      final response = _navigate(
         context,
         routeArgs.name,
         routeArgs.args,
@@ -134,7 +136,11 @@ class Sailor {
         null,
         null,
       );
+
+      pageResponses.add(response);
     });
+
+    return Future.wait(pageResponses);
   }
 
   /// Actual navigation is delegated by [navigate] method to this method.
