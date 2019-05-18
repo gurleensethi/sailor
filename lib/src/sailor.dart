@@ -246,9 +246,12 @@ class Sailor {
       if (route == null) return null;
 
       return MaterialPageRoute(
-        settings: settings,
+        settings: settings.arguments != null
+            ? settings
+            : settings.copyWith(arguments: route.defaultArgs),
         builder: (BuildContext context) {
-          return route.builder(context, settings.arguments);
+          return route.builder(
+              context, settings.arguments ?? route.defaultArgs);
         },
       );
     };

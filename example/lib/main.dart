@@ -37,7 +37,6 @@ class Home extends StatelessWidget {
                 final response = await Routes.sailor.navigate<bool>(
                   context,
                   "/secondPage",
-                  args: SecondPageArgs('Args From First Page'),
                 );
 
                 print("Response from SecondPage: $response");
@@ -140,6 +139,7 @@ class Routes {
     sailor
       ..addRoute(SailorRoute(
         name: "/secondPage",
+        defaultArgs: SecondPageArgs('From default arguments!'),
         builder: (context, args) {
           return SecondPage();
         },

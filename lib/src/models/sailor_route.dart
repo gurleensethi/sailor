@@ -8,10 +8,12 @@ typedef SailorRouteBuilder = Widget Function(
 class SailorRoute {
   final String name;
   final SailorRouteBuilder builder;
+  final BaseArguments defaultArgs;
 
   SailorRoute({
     @required this.name,
     @required this.builder,
+    this.defaultArgs,
   })  : assert(name != null),
         assert(builder != null);
 }
