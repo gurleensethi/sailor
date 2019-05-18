@@ -10,6 +10,10 @@ import 'models/route_args_pair.dart';
 enum NavigationType { push, pushReplace, pushAndRemoveUntil, popAndPushNamed }
 
 class Sailor {
+  Sailor({
+    this.options = const SailorOptions(),
+  }) : assert(options != null);
+
   /// Configuration options for [Sailor].
   ///
   /// Check out [SailorOptions] for available options.
@@ -19,9 +23,10 @@ class Sailor {
   /// Used to generate routes
   Map<String, SailorRoute> _routeNameMappings = {};
 
-  Sailor({
-    this.options = const SailorOptions(),
-  }) : assert(options != null);
+  /// Get the registered routes names as a list.
+  List<String> getRegisteredRouteNames() {
+    return _routeNameMappings.keys.toList();
+  }
 
   /// Retrieves the arguments passed in when calling the [navigate] function.
   ///
