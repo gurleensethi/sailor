@@ -19,7 +19,7 @@ class Sailor {
   /// Check out [SailorOptions] for available options.
   final SailorOptions options;
 
-  /// Store all the mappings of route names and corresponding CompassRoute
+  /// Store all the mappings of route names and corresponding [SailorRoute]
   /// Used to generate routes
   Map<String, SailorRoute> _routeNameMappings = {};
 
@@ -237,7 +237,7 @@ class Sailor {
 
   /// Generates the [RouteFactory] which builds a [Route] on request.
   ///
-  /// These routes are built using the [CompassRoute]s provided using
+  /// These routes are built using the [SailorRoute]s provided using
   /// [addRoute] method.
   RouteFactory generator() {
     return (settings) {
