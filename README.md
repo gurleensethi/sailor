@@ -9,8 +9,8 @@ A Flutter package for easy navigation management.
 #### Warning: Package is still under development, there might be breaking changes in future.
 
 ## Roadmap
-- [ ] Core Navigation Features
-- [ ] Proper logging when navigating
+- [x] Core Navigation Features
+- [x] Proper logging when navigating
 - [ ] Animations 
 
 ## Usage

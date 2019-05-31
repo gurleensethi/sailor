@@ -79,7 +79,7 @@ class Sailor {
   /// strategies such as [NavigationType.push], [NavigationType.pushReplace],
   /// [NavigationType.pushAndRemoveUntil].
   ///
-  /// [removeUntilPredicate] should be provided is using
+  /// [removeUntilPredicate] should be provided if using
   /// [NavigationType.pushAndRemoveUntil] strategy.
   Future<T> navigate<T>(
     BuildContext context,
