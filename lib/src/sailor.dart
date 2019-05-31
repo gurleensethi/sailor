@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sailor/src/models/base_arguments.dart';
 import 'package:sailor/src/models/sailor_options.dart';
 import 'package:sailor/src/models/sailor_route.dart';
+import 'package:sailor/src/transitions/slide_right_page_route.dart';
 import 'package:sailor/src/ui/page_not_found.dart';
 
 import 'models/route_args_pair.dart';
@@ -245,7 +246,7 @@ class Sailor {
 
       if (route == null) return null;
 
-      return MaterialPageRoute(
+      return SlideRightPageRoute(
         settings: settings.arguments != null
             ? settings
             : settings.copyWith(arguments: route.defaultArgs),
