@@ -1,46 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:sailor/src/transitions/transition_component.dart';
 
-class BaseTransitionPageRoute extends PageRoute {
-  final RouteSettings settings;
-  final WidgetBuilder builder;
-  final Curve curve;
+class BaseTransitionPageRoute extends PageRouteBuilder {
+  final TransitionComponent transitionComponent;
 
   BaseTransitionPageRoute({
-    this.settings,
-    @required this.builder,
-    this.curve = Curves.linear,
-  }) : super(settings: settings);
-
-  @override
-  Color get barrierColor => null;
-
-  @override
-  String get barrierLabel => null;
-
-  @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
-    return builder(context);
-  }
+    this.transitionComponent,
+    WidgetBuilder builder,
+    RouteSettings settings,
+  }) : super(pageBuilder: (context, anim1, anim2) => builder(context));
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
-    final curvedAnimation = CurvedAnimation(
-      parent: animation,
-      curve: curve,
-    );
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: Offset(1, 0.0),
-        end: Offset.zero,
-      ).animate(curvedAnimation),
-      child: child,
-    );
+    return transitionComponent.buildChildWithTransition(
+        context, animation, secondaryAnimation, child);
   }
-
-  @override
-  bool get maintainState => true;
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 300);
