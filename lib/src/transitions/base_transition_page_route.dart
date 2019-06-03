@@ -4,11 +4,14 @@ import 'package:sailor/src/transitions/transition_component.dart';
 class BaseTransitionPageRoute extends PageRouteBuilder {
   final TransitionComponent transitionComponent;
 
+  // TODO(gurleensethi): Add params for Duration and animation curves.
+
   BaseTransitionPageRoute({
     this.transitionComponent,
-    WidgetBuilder builder,
-    RouteSettings settings,
-  }) : super(pageBuilder: (context, anim1, anim2) => builder(context));
+    @required WidgetBuilder builder,
+    @required RouteSettings settings,
+  })  : assert(transitionComponent != null),
+        super(pageBuilder: (context, anim1, anim2) => builder(context));
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
