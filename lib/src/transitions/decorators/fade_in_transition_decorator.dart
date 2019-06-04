@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/animation/animation.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/material.dart';
 import 'package:sailor/src/transitions/transition_component.dart';
 import 'package:sailor/src/transitions/transiton_decorator.dart';
 
-class SlideDownTransitionDecorator extends TransitionDecorator {
-  SlideDownTransitionDecorator({
+class FadeInTransitionDecorator extends TransitionDecorator {
+  FadeInTransitionDecorator({
     TransitionComponent transitionComponent,
   }) : super(transitionComponent: transitionComponent);
 
@@ -15,11 +13,8 @@ class SlideDownTransitionDecorator extends TransitionDecorator {
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       Widget child) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: Offset(0.0, 1.0),
-        end: Offset.zero,
-      ).animate(animation),
+    return FadeTransition(
+      opacity: animation,
       child: transitionComponent.buildChildWithTransition(
           context, animation, secondaryAnimation, child),
     );

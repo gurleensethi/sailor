@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sailor/src/models/base_arguments.dart';
 import 'package:sailor/src/models/sailor_options.dart';
 import 'package:sailor/src/models/sailor_route.dart';
+import 'package:sailor/src/transitions/sailor_transition.dart';
 import 'package:sailor/src/transitions/transition_factory.dart';
 import 'package:sailor/src/ui/page_not_found.dart';
 
@@ -247,6 +248,9 @@ class Sailor {
       if (route == null) return null;
 
       return TransitionFactory.buildTransition(
+        transitions: [
+          SailorTransition.slide_from_right,
+        ],
         settings: settings.arguments != null
             ? settings
             : settings.copyWith(arguments: route.defaultArgs),
