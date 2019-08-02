@@ -1,7 +1,10 @@
 class SailorOptions {
   final bool handleNameNotFoundUI;
+  final bool isLoggingEnabled;
 
   const SailorOptions({
     this.handleNameNotFoundUI = false,
-  }) : assert(handleNameNotFoundUI != null);
+    this.isLoggingEnabled = false,
+  })  : assert(handleNameNotFoundUI != null),
+        assert(isLoggingEnabled != null);
 }

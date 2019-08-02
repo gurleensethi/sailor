@@ -132,6 +132,7 @@ class Routes {
   static final sailor = Sailor(
     options: SailorOptions(
       handleNameNotFoundUI: true,
+      isLoggingEnabled: true,
     ),
   );
 
@@ -140,15 +141,15 @@ class Routes {
       ..addRoute(SailorRoute(
         name: "/secondPage",
         defaultArgs: SecondPageArgs('From default arguments!'),
-        builder: (context, args) {
-          return SecondPage();
-        },
+        builder: (context, args) => SecondPage(),
       ))
       ..addRoute(SailorRoute(
         name: "/thirdPage",
-        builder: (BuildContext context, BaseArguments args) {
-          return ThirdPage();
-        },
+        builder: (context, args) => ThirdPage(),
+      ))
+      ..addRoute(SailorRoute(
+        name: "/thirdPage",
+        builder: (context, args) => ThirdPage(),
       ));
   }
 }

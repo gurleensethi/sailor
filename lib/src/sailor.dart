@@ -1,5 +1,6 @@
 import 'package:sailor/src/errors/route_not_found.dart';
 import 'package:flutter/material.dart';
+import 'package:sailor/src/logger/app_logger.dart';
 import 'package:sailor/src/models/base_arguments.dart';
 import 'package:sailor/src/models/sailor_options.dart';
 import 'package:sailor/src/models/sailor_route.dart';
@@ -14,7 +15,9 @@ enum NavigationType { push, pushReplace, pushAndRemoveUntil, popAndPushNamed }
 class Sailor {
   Sailor({
     this.options = const SailorOptions(),
-  }) : assert(options != null);
+  }) : assert(options != null) {
+    AppLogger.init(isLoggerEnabled: options.isLoggingEnabled);
+  }
 
   /// Configuration options for [Sailor].
   ///
@@ -49,6 +52,13 @@ class Sailor {
   /// If a route is provided with a name that was previously added, it will
   /// override the old one.
   void addRoute(SailorRoute route) {
+    assert(route != null, "'route' argument cannot be null.");
+
+    if (_routeNameMappings.containsKey(route.name)) {
+      AppLogger.instance.warning(
+          "'${route.name}' has already been registered before. Overriding it!");
+    }
+
     _routeNameMappings[route.name] = route;
   }
 
