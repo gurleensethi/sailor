@@ -37,6 +37,10 @@ class Home extends StatelessWidget {
                 final response = await Routes.sailor.navigate<bool>(
                   context,
                   "/secondPage",
+                  transitions: [
+                    SailorTransition.fade_in,
+                    SailorTransition.slide_from_right,
+                  ],
                 );
 
                 print("Response from SecondPage: $response");
@@ -133,6 +137,10 @@ class Routes {
     options: SailorOptions(
       handleNameNotFoundUI: true,
       isLoggingEnabled: true,
+      defaultTransitions: [
+        SailorTransition.slide_from_bottom,
+        SailorTransition.zoom_in,
+      ],
     ),
   );
 
@@ -141,6 +149,10 @@ class Routes {
       ..addRoute(SailorRoute(
         name: "/secondPage",
         defaultArgs: SecondPageArgs('From default arguments!'),
+        defaultTransitions: [
+          SailorTransition.slide_from_bottom,
+          SailorTransition.zoom_in,
+        ],
         builder: (context, args) => SecondPage(),
       ))
       ..addRoute(SailorRoute(

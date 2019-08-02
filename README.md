@@ -114,6 +114,71 @@ class SecondPage extends StatelessWidget {
 }
 ```
 
+## Transitions
+Sailor has inbuilt support for page transitions. A transition is specified using `SailorTransition`.
+
+Transition can be specified at 3 levels (ordered in priority from highest to lowest):
+
+- When Navigating (using `Sailor.navigate`).
+- While adding routes (`SailorRoute`).
+- Global transitions (`SailorOptions`).
+
+### When navigating
+Specify which transitions to use when calling the `navigate` method.
+
+```dart
+Routes.sailor.navigate(
+  context,
+  "/secondPage",
+  transitions: [SailorTransition.fade_in],
+);
+```
+
+More than one transition can be provided when navigating a single route. These transitions are composed on top of each other, so in some cases changing the order will change the animation.
+
+```dart
+Routes.sailor.navigate(
+  context,
+  "/secondPage",
+  transitions: [
+    SailorTransition.fade_in,
+    SailorTransition.slide_from_right,
+  ],
+);
+```
+
+In the above example the page will slide in from right with a fade in animation. You can specify as many transitions as you want.
+
+### When adding routes
+You can specify the default transition for a route, so you don't have to specify it again and again when navigating.
+
+```dart
+sailor.addRoute(SailorRoute(
+  name: "/secondPage",
+  defaultTransitions: [
+    SailorTransition.slide_from_bottom,
+    SailorTransition.zoom_in,
+  ],
+  builder: (context, args) => SecondPage(),
+));
+```
+
+Priority: Transitions provided in `Sailor.navigate` while navigating to this route, will override these transitions.
+
+### Global transitions
+You can specify default transition to be used for all routes in `Sailor`.
+
+```dart
+SailorOptions(
+  defaultTransitions: [
+    SailorTransition.slide_from_bottom,
+    SailorTransition.zoom_in,
+  ],
+)
+```
+
+Priority: Transitions provided while adding a route or when navigation using `navigate`, will override these transitions.
+
 ## Pushing Multiple Routes
 
 Sailor allows you to push multiple pages at the same time and get collected response from all.
