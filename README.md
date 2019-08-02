@@ -9,9 +9,10 @@ A Flutter package for easy navigation management.
 #### Warning: Package is still under development, there might be breaking changes in future.
 
 ## Roadmap
-- [x] Core Navigation Features
-- [x] Proper logging when navigating
-- [ ] Animations 
+- [x] Core Navigation Features.
+- [x] Proper logging when navigating.
+- [x] Basic Transitions.
+- [ ] More Transitions.
 
 ## Usage
 
@@ -67,7 +68,7 @@ Routes.sailor.navigate(context, "/secondPage");
 
 ```dart
 Routes.sailor(context, "/secondPage");
-``` 
+```
 
 ## Passing Arguments
 `Sailor` allows you to pass arguments to the page that you are navigating to.
@@ -129,7 +130,7 @@ print("Third Page Response ${responses[1]}");
 
 ## Log Navigation
 Use `SailorLoggingObserver` to log the `push`/`pop` navigation inside the application.
-Add the `SailorLoggingObserver` to the `navigatorObservers` list inside your `MaterialApp`. 
+Add the `SailorLoggingObserver` to the `navigatorObservers` list inside your `MaterialApp`.
 
 ```dart
 class App extends StatelessWidget {
@@ -155,5 +156,5 @@ flutter: [Sailor] Route Popped: (New Route='/', Popped Route='/secondPage', New 
 ```
 
 ## Support
-If you face any issue or want a new feature to be added to the package, please [create an issue](https://github.com/gurleensethi/sailor/issues/new). 
+If you face any issue or want a new feature to be added to the package, please [create an issue](https://github.com/gurleensethi/sailor/issues/new).
 I will be more than happy to resolve your queries.
