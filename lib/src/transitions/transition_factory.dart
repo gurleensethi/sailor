@@ -23,41 +23,29 @@ class TransitionFactory {
     transitions?.forEach((transition) {
       switch (transition) {
         case SailorTransition.slide_from_left:
-          {
-            transitionComponent = SlideLeftTransitionDecorator(
-                transitionComponent: transitionComponent);
-            break;
-          }
+          transitionComponent = SlideLeftTransitionDecorator(
+              transitionComponent: transitionComponent);
+          break;
         case SailorTransition.slide_from_bottom:
-          {
-            transitionComponent = SlideDownTransitionDecorator(
-                transitionComponent: transitionComponent);
-            break;
-          }
+          transitionComponent = SlideDownTransitionDecorator(
+              transitionComponent: transitionComponent);
+          break;
         case SailorTransition.slide_from_top:
-          {
-            transitionComponent = SlideTopTransitionDecorator(
-                transitionComponent: transitionComponent);
-            break;
-          }
+          transitionComponent = SlideTopTransitionDecorator(
+              transitionComponent: transitionComponent);
+          break;
         case SailorTransition.slide_from_right:
-          {
-            transitionComponent = SlideRightTransitionDecorator(
-                transitionComponent: transitionComponent);
-            break;
-          }
+          transitionComponent = SlideRightTransitionDecorator(
+              transitionComponent: transitionComponent);
+          break;
         case SailorTransition.zoom_in:
-          {
-            transitionComponent = ZoomInTransitionDecorator(
-                transitionComponent: transitionComponent);
-            break;
-          }
+          transitionComponent = ZoomInTransitionDecorator(
+              transitionComponent: transitionComponent);
+          break;
         case SailorTransition.fade_in:
-          {
-            transitionComponent = FadeInTransitionDecorator(
-                transitionComponent: transitionComponent);
-            break;
-          }
+          transitionComponent = FadeInTransitionDecorator(
+              transitionComponent: transitionComponent);
+          break;
       }
     });
 

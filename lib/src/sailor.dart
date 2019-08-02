@@ -75,6 +75,7 @@ class Sailor {
     }
   }
 
+  /// Makes this a callable class. Delegates to [navigate].
   Future<T> call<T>(
     BuildContext context,
     String name, {
@@ -83,6 +84,7 @@ class Sailor {
     dynamic result,
     bool Function(Route<dynamic> route) removeUntilPredicate,
     List<SailorTransition> transitions,
+    Duration transitionDuration,
   }) {
     return navigate<T>(
       context,
@@ -92,6 +94,7 @@ class Sailor {
       removeUntilPredicate: removeUntilPredicate,
       args: args,
       transitions: transitions,
+      transitionDuration: transitionDuration,
     );
   }
 
@@ -109,7 +112,9 @@ class Sailor {
   /// [removeUntilPredicate] should be provided if using
   /// [NavigationType.pushAndRemoveUntil] strategy.
   ///
-  /// [transitions] is a list of transtions to be used when switching between pages.
+  /// [transitions] is a list of transitions to be used when switching between
+  /// pages. [transitionDuration] and [transitionCurve] are duration and curve
+  /// used for these transitions.
   Future<T> navigate<T>(
     BuildContext context,
     String name, {
@@ -118,6 +123,8 @@ class Sailor {
     dynamic result,
     bool Function(Route<dynamic> route) removeUntilPredicate,
     List<SailorTransition> transitions,
+    Duration transitionDuration,
+    Curve transitionCurve,
   }) {
     assert(context != null);
     assert(name != null);
@@ -135,6 +142,8 @@ class Sailor {
       result,
       removeUntilPredicate,
       transitions,
+      transitionDuration,
+      transitionCurve,
     ).then((value) => value as T);
   }
 
@@ -172,6 +181,8 @@ class Sailor {
         null,
         null,
         routeArgs.transitions,
+        routeArgs.transitionDuration,
+        routeArgs.transitionCurve,
       );
 
       pageResponses.add(response);
@@ -194,7 +205,9 @@ class Sailor {
   /// [removeUntilPredicate] should be provided is using
   /// [NavigationType.pushAndRemoveUntil] strategy.
   ///
-  /// [transitions] is a list of transtions to be used when switching between pages.
+  /// [transitions] is a list of transitions to be used when switching between
+  /// pages. [transitionDuration] and [transitionCurve] are duration and curve
+  /// used for these transitions.
   Future<dynamic> _navigate(
     BuildContext context,
     String name,
@@ -203,10 +216,14 @@ class Sailor {
     dynamic result,
     bool Function(Route<dynamic> route) removeUntilPredicate,
     List<SailorTransition> transitions,
+    Duration transitionDuration,
+    Curve transitionCurve,
   ) {
     final argsWrapper = ArgumentsWrapper(
       baseArguments: args,
       transitions: transitions,
+      transitionDuration: transitionDuration,
+      transitionCurve: transitionCurve,
     );
 
     switch (navigationType) {
@@ -292,7 +309,7 @@ class Sailor {
       // Select which transitions to use.
       // Priority:
       //   1. Transitions provided when route is called.
-      //   2. Default transitions when route was registerd.
+      //   2. Default transitions when route was registered.
       //   3. Default transition from SailorOptions.
       final List<SailorTransition> transitions = [];
 
@@ -306,8 +323,18 @@ class Sailor {
         transitions.addAll(this.options.defaultTransitions);
       }
 
+      final transitionDuration = argsWrapper.transitionDuration ??
+          route.defaultTransitionDuration ??
+          this.options.defaultTransitionDuration;
+
+      final transitionCurve = argsWrapper.transitionCurve ??
+          route.defaultTransitionCurve ??
+          this.options.defaultTransitionCurve;
+
       return TransitionFactory.buildTransition(
         transitions: transitions,
+        duration: transitionDuration,
+        curve: transitionCurve,
         settings: baseArgs != null
             ? settings.copyWith(arguments: baseArgs)
             : settings.copyWith(arguments: route.defaultArgs),

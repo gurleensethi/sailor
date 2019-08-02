@@ -48,11 +48,19 @@ class Home extends StatelessWidget {
             RaisedButton(
               child: Text('Open Multi Page (Second and Third)'),
               onPressed: () async {
-                final responses =
-                    await Routes.sailor.navigateMultiple(context, [
-                  RouteArgsPair("/secondPage", SecondPageArgs("Multi Page!")),
-                  RouteArgsPair("/thirdPage", ThirdPageArgs(10)),
-                ]);
+                final responses = await Routes.sailor.navigateMultiple(
+                  context,
+                  [
+                    RouteArgsPair(
+                      "/secondPage",
+                      args: SecondPageArgs("Multi Page!"),
+                    ),
+                    RouteArgsPair(
+                      "/thirdPage",
+                      args: ThirdPageArgs(10),
+                    ),
+                  ],
+                );
 
                 print("Second Page Response ${responses[0]}");
                 print("Third Page Response ${responses[1]}");
@@ -140,12 +148,14 @@ class Routes {
         SailorTransition.slide_from_bottom,
         SailorTransition.zoom_in,
       ],
+      defaultTransitionCurve: Curves.decelerate,
+      defaultTransitionDuration: Duration(milliseconds: 500),
     ),
   );
 
   static void createRoutes() {
-    sailor
-      ..addRoute(SailorRoute(
+    sailor.addRoutes([
+      SailorRoute(
         name: "/secondPage",
         defaultArgs: SecondPageArgs('From default arguments!'),
         defaultTransitions: [
@@ -153,11 +163,12 @@ class Routes {
           SailorTransition.zoom_in,
         ],
         builder: (context, args) => SecondPage(),
-      ))
-      ..addRoute(SailorRoute(
+      ),
+      SailorRoute(
         name: "/thirdPage",
         defaultTransitions: [SailorTransition.slide_from_left],
         builder: (context, args) => ThirdPage(),
-      ));
+      )
+    ]);
   }
 }
