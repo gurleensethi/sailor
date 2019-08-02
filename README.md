@@ -12,7 +12,7 @@ A Flutter package for easy navigation management.
 - [x] Core Navigation Features.
 - [x] Proper logging when navigating.
 - [x] Basic Transitions.
-- [ ] More Transitions.
+- [ ] Advance Transitions (duration, curves, more set of inbuilt transitions).
 - [ ] Pretty printing navigation stack.
 
 ## Index

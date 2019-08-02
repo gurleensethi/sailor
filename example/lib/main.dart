@@ -38,8 +38,7 @@ class Home extends StatelessWidget {
                   context,
                   "/secondPage",
                   transitions: [
-                    SailorTransition.fade_in,
-                    SailorTransition.slide_from_right,
+                    SailorTransition.slide_from_top,
                   ],
                 );
 
