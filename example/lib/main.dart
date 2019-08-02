@@ -38,7 +38,7 @@ class Home extends StatelessWidget {
                   context,
                   "/secondPage",
                   transitions: [
-                    SailorTransition.slide_from_right,
+                    SailorTransition.slide_from_top,
                   ],
                 );
 
@@ -136,6 +136,10 @@ class Routes {
     options: SailorOptions(
       handleNameNotFoundUI: true,
       isLoggingEnabled: true,
+      defaultTransitions: [
+        SailorTransition.slide_from_bottom,
+        SailorTransition.zoom_in,
+      ],
     ),
   );
 
@@ -144,14 +148,15 @@ class Routes {
       ..addRoute(SailorRoute(
         name: "/secondPage",
         defaultArgs: SecondPageArgs('From default arguments!'),
+        defaultTransitions: [
+          SailorTransition.slide_from_bottom,
+          SailorTransition.zoom_in,
+        ],
         builder: (context, args) => SecondPage(),
       ))
       ..addRoute(SailorRoute(
         name: "/thirdPage",
-        builder: (context, args) => ThirdPage(),
-      ))
-      ..addRoute(SailorRoute(
-        name: "/thirdPage",
+        defaultTransitions: [SailorTransition.slide_from_left],
         builder: (context, args) => ThirdPage(),
       ));
   }

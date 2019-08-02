@@ -159,8 +159,7 @@ class Sailor {
         NavigationType.push,
         null,
         null,
-        // TODO(gurleensethi): Get transitions from user.
-        [],
+        routeArgs.transitions,
       );
 
       pageResponses.add(response);
@@ -278,8 +277,25 @@ class Sailor {
       final argsWrapper = settings.arguments as ArgumentsWrapper;
       final baseArgs = argsWrapper.baseArguments;
 
+      // Select which transitions to use.
+      // Priority:
+      //   1. Transitions provided when route is called.
+      //   2. Default transitions when route was registerd.
+      //   3. Default transition from SailorOptions.
+      final List<SailorTransition> transitions = [];
+
+      if (argsWrapper.transitions != null &&
+          argsWrapper.transitions.isNotEmpty) {
+        transitions.addAll(argsWrapper.transitions);
+      } else if (route.defaultTransitions != null &&
+          route.defaultTransitions.isNotEmpty) {
+        transitions.addAll(route.defaultTransitions);
+      } else if (this.options.defaultTransitions != null) {
+        transitions.addAll(this.options.defaultTransitions);
+      }
+
       return TransitionFactory.buildTransition(
-        transitions: argsWrapper.transitions,
+        transitions: transitions,
         settings: baseArgs != null
             ? settings.copyWith(arguments: baseArgs)
             : settings.copyWith(arguments: route.defaultArgs),

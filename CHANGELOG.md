@@ -1,3 +1,8 @@
+## [0.0.5] - 2 August 2019
+
+* Inbuilt page transitions.
+
+
 ## [0.0.4] - 18 May 2019
 
 * Launch multiple routes at the same time using `navigateMultiple`.
