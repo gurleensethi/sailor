@@ -1,6 +1,7 @@
 import 'package:sailor/src/errors/route_not_found.dart';
 import 'package:flutter/material.dart';
 import 'package:sailor/src/logger/app_logger.dart';
+import 'package:sailor/src/models/arguments_wrapper.dart';
 import 'package:sailor/src/models/base_arguments.dart';
 import 'package:sailor/src/models/sailor_options.dart';
 import 'package:sailor/src/models/sailor_route.dart';
@@ -69,6 +70,7 @@ class Sailor {
     NavigationType navigationType = NavigationType.push,
     dynamic result,
     bool Function(Route<dynamic> route) removeUntilPredicate,
+    List<SailorTransition> transitions,
   }) {
     return navigate<T>(
       context,
@@ -77,6 +79,7 @@ class Sailor {
       result: result,
       removeUntilPredicate: removeUntilPredicate,
       args: args,
+      transitions: transitions,
     );
   }
 
@@ -93,6 +96,8 @@ class Sailor {
   ///
   /// [removeUntilPredicate] should be provided if using
   /// [NavigationType.pushAndRemoveUntil] strategy.
+  ///
+  /// [transitions] is a list of transtions to be used when switching between pages.
   Future<T> navigate<T>(
     BuildContext context,
     String name, {
@@ -100,6 +105,7 @@ class Sailor {
     NavigationType navigationType = NavigationType.push,
     dynamic result,
     bool Function(Route<dynamic> route) removeUntilPredicate,
+    List<SailorTransition> transitions,
   }) {
     assert(context != null);
     assert(name != null);
@@ -116,6 +122,7 @@ class Sailor {
       navigationType,
       result,
       removeUntilPredicate,
+      transitions,
     ).then((value) => value as T);
   }
 
@@ -152,6 +159,8 @@ class Sailor {
         NavigationType.push,
         null,
         null,
+        // TODO(gurleensethi): Get transitions from user.
+        [],
       );
 
       pageResponses.add(response);
@@ -173,6 +182,8 @@ class Sailor {
   ///
   /// [removeUntilPredicate] should be provided is using
   /// [NavigationType.pushAndRemoveUntil] strategy.
+  ///
+  /// [transitions] is a list of transtions to be used when switching between pages.
   Future<dynamic> _navigate(
     BuildContext context,
     String name,
@@ -180,18 +191,24 @@ class Sailor {
     NavigationType navigationType,
     dynamic result,
     bool Function(Route<dynamic> route) removeUntilPredicate,
+    List<SailorTransition> transitions,
   ) {
+    final argsWrapper = ArgumentsWrapper(
+      baseArguments: args,
+      transitions: transitions,
+    );
+
     switch (navigationType) {
       case NavigationType.push:
         {
-          return Navigator.of(context).pushNamed(name, arguments: args);
+          return Navigator.of(context).pushNamed(name, arguments: argsWrapper);
         }
       case NavigationType.pushReplace:
         {
           return Navigator.of(context).pushReplacementNamed(
             name,
             result: result,
-            arguments: args,
+            arguments: argsWrapper,
           );
         }
       case NavigationType.pushAndRemoveUntil:
@@ -199,15 +216,15 @@ class Sailor {
           return Navigator.of(context).pushNamedAndRemoveUntil(
             name,
             removeUntilPredicate,
-            arguments: args,
+            arguments: argsWrapper,
           );
         }
       case NavigationType.popAndPushNamed:
         {
           return Navigator.of(context).popAndPushNamed(
             name,
-            arguments: args,
             result: result,
+            arguments: argsWrapper,
           );
         }
     }
@@ -257,17 +274,17 @@ class Sailor {
 
       if (route == null) return null;
 
+      // TODO(gurleensethi): Check if this is a sailor route or a normal route.
+      final argsWrapper = settings.arguments as ArgumentsWrapper;
+      final baseArgs = argsWrapper.baseArguments;
+
       return TransitionFactory.buildTransition(
-        transitions: [
-          SailorTransition.slide_from_right,
-        ],
-        settings: settings.arguments != null
-            ? settings
+        transitions: argsWrapper.transitions,
+        settings: baseArgs != null
+            ? settings.copyWith(arguments: baseArgs)
             : settings.copyWith(arguments: route.defaultArgs),
-        builder: (BuildContext context) {
-          return route.builder(
-              context, settings.arguments ?? route.defaultArgs);
-        },
+        builder: (context) =>
+            route.builder(context, baseArgs ?? route.defaultArgs),
       );
     };
   }

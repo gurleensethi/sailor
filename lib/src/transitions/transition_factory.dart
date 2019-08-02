@@ -5,7 +5,6 @@ import 'package:sailor/src/transitions/decorators/fade_in_transition_decorator.d
 import 'package:sailor/src/transitions/decorators/slide_bottom_transition_decorator.dart';
 import 'package:sailor/src/transitions/decorators/slide_left_transition_decorator.dart';
 import 'package:sailor/src/transitions/decorators/slide_right_transition_decorator.dart';
-import 'package:sailor/src/transitions/decorators/slide_top_transition_decorator.dart';
 import 'package:sailor/src/transitions/decorators/zoom_in_transition_decorator.dart';
 import 'package:sailor/src/transitions/sailor_transition.dart';
 import 'package:sailor/src/transitions/transition_component.dart';

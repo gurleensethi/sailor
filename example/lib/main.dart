@@ -37,6 +37,9 @@ class Home extends StatelessWidget {
                 final response = await Routes.sailor.navigate<bool>(
                   context,
                   "/secondPage",
+                  transitions: [
+                    SailorTransition.slide_from_right,
+                  ],
                 );
 
                 print("Response from SecondPage: $response");
