@@ -129,7 +129,7 @@ class ThirdPage extends StatelessWidget {
             RaisedButton(
               child: Text('Close Page'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Sailor.pop(context, result: 10);
               },
             ),
           ],

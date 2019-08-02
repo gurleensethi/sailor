@@ -288,8 +288,13 @@ class Sailor {
   }
 
   /// Delegation for [Navigator.pop].
-  bool pop(BuildContext context, {dynamic result}) {
+  static bool pop(BuildContext context, {dynamic result}) {
     return Navigator.of(context).pop(result);
+  }
+
+  /// Delegation for [Navigator.popUntil].
+  static void popUntil(BuildContext context, void Function(Route<dynamic>) predicate) {
+    Navigator.of(context).popUntil(predicate);
   }
 
   /// Generates the [RouteFactory] which builds a [Route] on request.
