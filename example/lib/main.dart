@@ -141,7 +141,6 @@ class Routes {
       ..addRoute(SailorRoute(
         name: "/secondPage",
         defaultArgs: SecondPageArgs('From default arguments!'),
-        defaultTransitions: [SailorTransition.slide_from_right],
         builder: (context, args) => SecondPage(),
       ))
       ..addRoute(SailorRoute(
