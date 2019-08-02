@@ -11,8 +11,8 @@ A Flutter package for easy navigation management.
 ## Roadmap
 - [x] Core Navigation Features.
 - [x] Proper logging when navigating.
-- [x] Basic Transitions.
-- [ ] Advance Transitions (duration, curves, more set of inbuilt transitions).
+- [x] Basic Transitions and configuration.
+- [ ] More inbuilt transitions.
 - [ ] Pretty printing navigation stack.
 
 ## Index
@@ -151,6 +151,23 @@ Routes.sailor.navigate(
     SailorTransition.fade_in,
     SailorTransition.slide_from_right,
   ],
+  transitionDuration: Duration(milliseconds: 500),
+  transitionCurve: Curves.bounceOut,
+);
+```
+
+`Duration` and `Curve` can be provided using `transitionDuration` and `transitionCurve` respectively.
+
+```dart
+Routes.sailor.navigate(
+  context,
+  "/secondPage",
+  transitions: [
+    SailorTransition.fade_in,
+    SailorTransition.slide_from_right,
+  ],
+  transitionDuration: Duration(milliseconds: 500),
+  transitionCurve: Curves.bounceOut,
 );
 ```
 
@@ -166,6 +183,8 @@ sailor.addRoute(SailorRoute(
     SailorTransition.slide_from_bottom,
     SailorTransition.zoom_in,
   ],
+  defaultTransitionCurve: Curves.decelerate,
+  defaultTransitionDuration: Duration(milliseconds: 500),
   builder: (context, args) => SecondPage(),
 ));
 ```
@@ -181,6 +200,8 @@ SailorOptions(
     SailorTransition.slide_from_bottom,
     SailorTransition.zoom_in,
   ],
+  defaultTransitionCurve: Curves.decelerate,
+  defaultTransitionDuration: Duration(milliseconds: 500),
 )
 ```
 
