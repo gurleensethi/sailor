@@ -293,7 +293,8 @@ class Sailor {
   }
 
   /// Delegation for [Navigator.popUntil].
-  static void popUntil(BuildContext context, void Function(Route<dynamic>) predicate) {
+  static void popUntil(
+      BuildContext context, void Function(Route<dynamic>) predicate) {
     Navigator.of(context).popUntil(predicate);
   }
 
