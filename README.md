@@ -13,6 +13,13 @@ A Flutter package for easy navigation management.
 - [x] Proper logging when navigating.
 - [x] Basic Transitions.
 - [ ] More Transitions.
+- [ ] Pretty printing navigation stack.
+
+## Index
+- [Usage](#usage)
+- [Passing Arguments](#passing-arguments)
+- [Transitions](#transitions)
+- [Pushing Multiple Routes](#pushing-multiple-routes)
 
 ## Usage
 
@@ -64,7 +71,7 @@ class App extends StatelessWidget {
 Routes.sailor.navigate(context, "/secondPage");
 ```
 
-* TIP: `Sailor` is a callable class, so you omit `navigate` and directly call the method.
+* TIP: `Sailor` is a callable class, so you can omit `navigate` and directly call the method.
 
 ```dart
 Routes.sailor(context, "/secondPage");
@@ -177,7 +184,7 @@ SailorOptions(
 )
 ```
 
-Priority: Transitions provided while adding a route or when navigation using `navigate`, will override these transitions.
+Priority: Transitions provided while adding a route or when navigating using `navigate`, will override these transitions.
 
 ## Pushing Multiple Routes
 
