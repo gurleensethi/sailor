@@ -159,8 +159,7 @@ class Sailor {
         NavigationType.push,
         null,
         null,
-        // TODO(gurleensethi): Get transitions from user.
-        [],
+        routeArgs.transitions,
       );
 
       pageResponses.add(response);
@@ -278,8 +277,15 @@ class Sailor {
       final argsWrapper = settings.arguments as ArgumentsWrapper;
       final baseArgs = argsWrapper.baseArguments;
 
+      bool hasUserProvidedTransitions =
+          argsWrapper.transitions == null || argsWrapper.transitions.isEmpty;
+
+      final transitions = hasUserProvidedTransitions
+          ? route.defaultTransitions
+          : argsWrapper.transitions;
+
       return TransitionFactory.buildTransition(
-        transitions: argsWrapper.transitions,
+        transitions: transitions,
         settings: baseArgs != null
             ? settings.copyWith(arguments: baseArgs)
             : settings.copyWith(arguments: route.defaultArgs),
