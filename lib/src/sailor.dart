@@ -13,6 +13,9 @@ import 'models/route_args_pair.dart';
 
 enum NavigationType { push, pushReplace, pushAndRemoveUntil, popAndPushNamed }
 
+/// Sailor manages routing, registering routes with transitions, navigating to
+/// routes, closing routes. It is a thin layer on top of [Navigator] to help
+/// you encapsulate and manage routing at one place.
 class Sailor {
   Sailor({
     this.options = const SailorOptions(),
@@ -61,6 +64,15 @@ class Sailor {
     }
 
     _routeNameMappings[route.name] = route;
+  }
+
+  /// Add a list of routes at once.
+  ///
+  /// Calls [addRoute] for each route in the list.
+  void addRoutes(List<SailorRoute> routes) {
+    if (routes != null && routes.isNotEmpty) {
+      routes.forEach((route) => this.addRoute(route));
+    }
   }
 
   Future<T> call<T>(
