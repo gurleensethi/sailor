@@ -3,20 +3,41 @@ import 'package:sailor/src/transitions/transition_component.dart';
 
 class BaseTransitionPageRoute extends PageRouteBuilder {
   final TransitionComponent transitionComponent;
+  final Duration duration;
+  final Curve curve;
+  final bool useDefaultPageTransition;
 
   BaseTransitionPageRoute({
     this.transitionComponent,
-    WidgetBuilder builder,
-    RouteSettings settings,
-  }) : super(pageBuilder: (context, anim1, anim2) => builder(context));
+    @required WidgetBuilder builder,
+    @required RouteSettings settings,
+    this.duration,
+    this.curve,
+    this.useDefaultPageTransition = false,
+  })  : assert(transitionComponent != null),
+        assert(useDefaultPageTransition != null),
+        super(
+            pageBuilder: (context, anim1, anim2) => builder(context),
+            settings: settings);
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
+    if (this.useDefaultPageTransition) {
+      return Theme.of(context).pageTransitionsTheme.buildTransitions(
+          this, context, animation, secondaryAnimation, child);
+    }
+
+    final curvedAnimation = CurvedAnimation(
+      parent: animation,
+      curve: this.curve ?? Curves.linear,
+    );
+
     return transitionComponent.buildChildWithTransition(
-        context, animation, secondaryAnimation, child);
+        context, curvedAnimation, secondaryAnimation, child);
   }
 
   @override
-  Duration get transitionDuration => Duration(milliseconds: 300);
+  Duration get transitionDuration =>
+      this.duration ?? Duration(milliseconds: 300);
 }

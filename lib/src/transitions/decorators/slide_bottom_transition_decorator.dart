@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sailor/src/transitions/transition_component.dart';
 import 'package:sailor/src/transitions/transiton_decorator.dart';
 
-class SlideTopTransitionDecorator extends TransitionDecorator {
-  SlideTopTransitionDecorator({
+class SlideDownTransitionDecorator extends TransitionDecorator {
+  SlideDownTransitionDecorator({
     TransitionComponent transitionComponent,
   }) : super(transitionComponent: transitionComponent);
 
@@ -15,7 +15,7 @@ class SlideTopTransitionDecorator extends TransitionDecorator {
       Widget child) {
     return SlideTransition(
       position: Tween<Offset>(
-        begin: Offset(0.0, -1.0),
+        begin: Offset(0.0, 1.0),
         end: Offset.zero,
       ).animate(animation),
       child: transitionComponent.buildChildWithTransition(
