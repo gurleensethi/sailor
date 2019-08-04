@@ -220,8 +220,12 @@ class PushReplacePage extends StatelessWidget {
               },
             ),
             Text(Routes.sailor.navigationStackObserver
+<<<<<<< HEAD
                 .getRouteStack()[0]
                 .toString())
+=======
+                .getRouteStack()[0].toString())
+>>>>>>> Add methods to get route stack
           ],
         ),
       ),
