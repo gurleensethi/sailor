@@ -90,6 +90,12 @@ class Home extends StatelessWidget {
                 Routes.sailor.navigate("/pushReplacePage");
               },
             ),
+            RaisedButton(
+              child: Text('Print navigation stack!'),
+              onPressed: () {
+                Routes.sailor.navigationStackObserver.prettyPrintStack();
+              },
+            ),
           ],
         ),
       ),
@@ -256,11 +262,7 @@ class Routes {
       ),
       SailorRoute(
         name: "/thirdPage",
-<<<<<<< HEAD
         builder: (context, args, params) => ThirdPage(),
-=======
-        builder: (context, args) => ThirdPage(),
->>>>>>> Remove context requirement by using MaterialApp/CupertinoApp's navigator.
         defaultTransitions: [SailorTransition.slide_from_left],
       ),
       SailorRoute(
