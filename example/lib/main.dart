@@ -16,6 +16,7 @@ class App extends StatelessWidget {
       navigatorKey: Routes.sailor.navigatorKey,
       navigatorObservers: [
         SailorLoggingObserver(),
+        Routes.sailor.navigationStackObserver,
       ],
     );
   }
@@ -57,16 +58,24 @@ class Home extends StatelessWidget {
                     "/thirdPage",
                     args: ThirdPageArgs(10),
                   ),
+                  RouteArgsPair("/pushReplacePage"),
                 ]);
 
                 print("Second Page Response ${responses[0]}");
                 print("Third Page Response ${responses[1]}");
+                print("Third Page Response ${responses[2]}");
               },
             ),
             RaisedButton(
               child: Text('Push Replace Page'),
               onPressed: () async {
                 Routes.sailor.navigate("/pushReplacePage");
+              },
+            ),
+            RaisedButton(
+              child: Text('Print navigation stack!'),
+              onPressed: () {
+                Routes.sailor.navigationStackObserver.prettyPrintStack();
               },
             ),
           ],
@@ -102,6 +111,12 @@ class SecondPage extends StatelessWidget {
                 Routes.sailor.pop(true);
               },
             ),
+            RaisedButton(
+              child: Text('Print navigation stack!'),
+              onPressed: () {
+                Routes.sailor.navigationStackObserver.prettyPrintStack();
+              },
+            ),
           ],
         ),
       ),
@@ -135,6 +150,12 @@ class ThirdPage extends StatelessWidget {
                 Routes.sailor.pop(10);
               },
             ),
+            RaisedButton(
+              child: Text('Print navigation stack!'),
+              onPressed: () {
+                Routes.sailor.navigationStackObserver.prettyPrintStack();
+              },
+            ),
           ],
         ),
       ),
@@ -160,6 +181,22 @@ class PushReplacePage extends StatelessWidget {
                   "/secondPage",
                   navigationType: NavigationType.pushReplace,
                 );
+              },
+            ),
+            RaisedButton(
+              child: Text('Push Unitl First and Replace'),
+              onPressed: () {
+                Routes.sailor.navigate(
+                  "/secondPage",
+                  navigationType: NavigationType.pushAndRemoveUntil,
+                  removeUntilPredicate: (route) => route.isFirst,
+                );
+              },
+            ),
+            RaisedButton(
+              child: Text('Print navigation stack!'),
+              onPressed: () {
+                Routes.sailor.navigationStackObserver.prettyPrintStack();
               },
             ),
           ],

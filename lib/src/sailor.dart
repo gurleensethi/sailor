@@ -5,6 +5,7 @@ import 'package:sailor/src/models/arguments_wrapper.dart';
 import 'package:sailor/src/models/base_arguments.dart';
 import 'package:sailor/src/models/sailor_options.dart';
 import 'package:sailor/src/models/sailor_route.dart';
+import 'package:sailor/src/navigator_observers/sailor_stack_observer.dart';
 import 'package:sailor/src/transitions/sailor_transition.dart';
 import 'package:sailor/src/transitions/transition_factory.dart';
 import 'package:sailor/src/ui/page_not_found.dart';
@@ -42,6 +43,10 @@ class Sailor {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
+
+  SailorStackObserver _navigationStackObserver = SailorStackObserver();
+
+  SailorStackObserver get navigationStackObserver => _navigationStackObserver;
 
   /// Get the registered routes names as a list.
   List<String> getRegisteredRouteNames() {

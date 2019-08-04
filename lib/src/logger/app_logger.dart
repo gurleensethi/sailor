@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-enum _LogLevel { warning, error }
+enum _LogLevel { info, warning, error }
 
 String _logLevelToString(_LogLevel level) {
   return level.toString().split(".")[1].toUpperCase();
@@ -25,18 +25,23 @@ class AppLogger {
 
   static AppLogger get instance => _instance;
 
+  void info(String message) {
+    _log(
+      level: _LogLevel.info,
+      message: message,
+    );
+  }
+
   void warning(String message) {
     _log(
       level: _LogLevel.warning,
       message: message,
-      time: DateTime.now(),
     );
   }
 
   void _log({
     String message,
     _LogLevel level,
-    DateTime time,
   }) {
     if (this.isLoggerEnabled) {
       print("[Sailor] ${_logLevelToString(level)} : $message");
