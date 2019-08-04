@@ -1,8 +1,4 @@
 import 'dart:collection';
-<<<<<<< HEAD
-=======
-
->>>>>>> Add methods to get route stack
 import 'package:flutter/widgets.dart';
 import 'package:sailor/src/logger/app_logger.dart';
 
@@ -37,7 +33,6 @@ class SailorStackObserver extends NavigatorObserver {
     _routeStack.removeWhere((route) => route == removedRoute);
   }
 
-<<<<<<< HEAD
   /// Returns the list of [Route]s represented as a stack of routes currently
   /// push by Navigator.
   ///
@@ -55,33 +50,37 @@ class SailorStackObserver extends NavigatorObserver {
     final stack =
         this._routeStack.reversed.map((route) => route.settings.name).toList();
     return UnmodifiableListView(stack);
-=======
-  UnmodifiableListView<Route> getRouteStack() {
-    return this._routeStack.reversed.toList();
-  }
-
-  UnmodifiableListView<String> getRouteNameStack() {
-    return this
-        ._routeStack
-        .reversed
-        .map((route) => route.settings.name)
-        .toList();
->>>>>>> Add methods to get route stack
-  }
-
-  void prettyPrintStack() {
-    if (!AppLogger.instance.isLoggerEnabled) {
-      print("`AppLogger` should be enabled to print any Sailor logs.");
+    UnmodifiableListView<Route> getRouteStack() {
+      final stack = this._routeStack.reversed.toList();
+      return UnmodifiableListView(stack);
     }
 
-    if (this._routeStack.isEmpty) {
-      AppLogger.instance.info("Navigation stack is empty!");
-    } else {
-      String printableStack = _routeStack.fold("", (prevValue, route) {
-        return "$prevValue ${route.isFirst ? "" : "--->"} ${route.settings.name}";
-      });
+    /// Returns the list of route names represented as a stack of routes currently
+    /// push by Navigator.
+    ///
+    /// Head and tail of list are bottom and top of stack respectively.
+    UnmodifiableListView<String> getRouteNameStack() {
+      return this
+          ._routeStack
+          .reversed
+          .map((route) => route.settings.name)
+          .toList();
+    }
 
-      AppLogger.instance.info("Navigation Stack: " + printableStack);
+    void prettyPrintStack() {
+      if (!AppLogger.instance.isLoggerEnabled) {
+        print("`AppLogger` should be enabled to print any Sailor logs.");
+      }
+
+      if (this._routeStack.isEmpty) {
+        AppLogger.instance.info("Navigation stack is empty!");
+      } else {
+        String printableStack = _routeStack.fold("", (prevValue, route) {
+          return "$prevValue ${route.isFirst ? "" : "--->"} ${route.settings.name}";
+        });
+
+        AppLogger.instance.info("Navigation Stack: " + printableStack);
+      }
     }
   }
 }
