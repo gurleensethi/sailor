@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/widgets.dart';
 import 'package:sailor/src/logger/app_logger.dart';
 
@@ -29,6 +31,18 @@ class SailorStackObserver extends NavigatorObserver {
   @override
   void didRemove(Route removedRoute, Route previousRoute) {
     _routeStack.removeWhere((route) => route == removedRoute);
+  }
+
+  UnmodifiableListView<Route> getRouteStack() {
+    return this._routeStack.reversed.toList();
+  }
+
+  UnmodifiableListView<String> getRouteNameStack() {
+    return this
+        ._routeStack
+        .reversed
+        .map((route) => route.settings.name)
+        .toList();
   }
 
   void prettyPrintStack() {
