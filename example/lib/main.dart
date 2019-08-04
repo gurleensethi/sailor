@@ -84,6 +84,12 @@ class Home extends StatelessWidget {
                 Routes.sailor.navigate("/pushReplacePage");
               },
             ),
+            RaisedButton(
+              child: Text('Push Replace Page'),
+              onPressed: () async {
+                Routes.sailor.navigate("/pushReplacePage");
+              },
+            ),
           ],
         ),
       ),
@@ -250,7 +256,11 @@ class Routes {
       ),
       SailorRoute(
         name: "/thirdPage",
+<<<<<<< HEAD
         builder: (context, args, params) => ThirdPage(),
+=======
+        builder: (context, args) => ThirdPage(),
+>>>>>>> Remove context requirement by using MaterialApp/CupertinoApp's navigator.
         defaultTransitions: [SailorTransition.slide_from_left],
       ),
       SailorRoute(
