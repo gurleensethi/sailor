@@ -343,13 +343,17 @@ class Sailor {
           route.defaultTransitionCurve ??
           this.options.defaultTransitionCurve;
 
+      RouteSettings routeSettings = RouteSettings(
+        name: settings.name,
+        isInitialRoute: settings.isInitialRoute,
+        arguments: baseArgs != null ? baseArgs : route.defaultArgs,
+      );
+
       return TransitionFactory.buildTransition(
         transitions: transitions,
         duration: transitionDuration,
         curve: transitionCurve,
-        settings: baseArgs != null
-            ? settings.copyWith(arguments: baseArgs)
-            : settings.copyWith(arguments: route.defaultArgs),
+        settings: routeSettings,
         builder: (context) =>
             route.builder(context, baseArgs ?? route.defaultArgs),
       );

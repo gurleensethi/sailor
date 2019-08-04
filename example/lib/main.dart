@@ -187,7 +187,7 @@ class PushReplacePage extends StatelessWidget {
               child: Text('Push Unitl First and Replace'),
               onPressed: () {
                 Routes.sailor.navigate(
-                  "/secondPage",
+                  "/thirdPage",
                   navigationType: NavigationType.pushAndRemoveUntil,
                   removeUntilPredicate: (route) => route.isFirst,
                 );

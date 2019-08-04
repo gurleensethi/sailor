@@ -38,7 +38,7 @@ class SailorLoggingObserver extends NavigatorObserver {
   void didRemove(Route route, Route previousRoute) {
     super.didRemove(route, previousRoute);
 
-    print("[Sailor] Route Popped: "
+    print("[Sailor] Route Removed: "
         "(New Route='${previousRoute?.settings?.name}', "
         "Removed Route='${route?.settings?.name}', "
         "New Route Args=${previousRoute?.settings?.arguments}, "

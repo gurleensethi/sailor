@@ -1,8 +1,8 @@
 import 'dart:collection';
-
 import 'package:flutter/widgets.dart';
 import 'package:sailor/src/logger/app_logger.dart';
 
+/// Experimental! might be removed or changed.
 class SailorStackObserver extends NavigatorObserver {
   final NavigatorState navigatorState;
   final List<Route> _routeStack = [];
@@ -33,19 +33,30 @@ class SailorStackObserver extends NavigatorObserver {
     _routeStack.removeWhere((route) => route == removedRoute);
   }
 
+  /// Returns the list of [Route]s represented as a stack of routes currently
+  /// push by Navigator.
+  ///
+  /// Head and tail of list are bottom and top of stack respectively.
   UnmodifiableListView<Route> getRouteStack() {
-    return this._routeStack.reversed.toList();
+    final stack = this._routeStack.reversed.toList();
+    return UnmodifiableListView(stack);
   }
 
+  /// Returns the list of route names represented as a stack of routes currently
+  /// push by Navigator.
+  ///
+  /// Head and tail of list are bottom and top of stack respectively.
   UnmodifiableListView<String> getRouteNameStack() {
-    return this
-        ._routeStack
-        .reversed
-        .map((route) => route.settings.name)
-        .toList();
+    final stack =
+        this._routeStack.reversed.map((route) => route.settings.name).toList();
+    return UnmodifiableListView(stack);
   }
 
   void prettyPrintStack() {
+    if (!AppLogger.instance.isLoggerEnabled) {
+      print("`AppLogger` should be enabled to print any Sailor logs.");
+    }
+
     if (this._routeStack.isEmpty) {
       AppLogger.instance.info("Navigation stack is empty!");
     } else {
