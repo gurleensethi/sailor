@@ -32,6 +32,17 @@ class Sailor {
   /// Used to generate routes
   Map<String, SailorRoute> _routeNameMappings = {};
 
+  /// A navigator key lets Sailor grab the [NavigatorState] from a [MaterialApp]
+  /// or a [CupertinoApp]. All navigation operations (push, pop, etc) are carried
+  /// out using this [NavigatorState].
+  ///
+  /// This is the same [NavigatorState] that is returned by [Navigator.of(context)]
+  /// (when there is only a single [Navigator] in Widget tree, i.e. from [MaterialApp]
+  /// or [CupertinoApp]).
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
+  GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
+
   /// Get the registered routes names as a list.
   List<String> getRegisteredRouteNames() {
     return _routeNameMappings.keys.toList();
@@ -45,7 +56,13 @@ class Sailor {
   /// Make sure to provide the appropriate type, that is, provide the same type
   /// as the one passed while calling [navigate], else a cast error will be
   /// thrown.
+  @Deprecated('Use \'args\' instead.')
   static T arguments<T extends BaseArguments>(BuildContext context) {
+    return ModalRoute.of(context).settings.arguments as T;
+  }
+
+  /// Alias for [arguments].
+  static T args<T extends BaseArguments>(BuildContext context) {
     return ModalRoute.of(context).settings.arguments as T;
   }
 
@@ -77,7 +94,6 @@ class Sailor {
 
   /// Makes this a callable class. Delegates to [navigate].
   Future<T> call<T>(
-    BuildContext context,
     String name, {
     BaseArguments args,
     NavigationType navigationType = NavigationType.push,
@@ -87,7 +103,6 @@ class Sailor {
     Duration transitionDuration,
   }) {
     return navigate<T>(
-      context,
       name,
       navigationType: navigationType,
       result: result,
@@ -103,7 +118,7 @@ class Sailor {
   /// [name] is the route name that was registered using [addRoute].
   ///
   /// [args] are optional arguments that can be passed to the next page.
-  /// To retrieve these arguments use [arguments] method on [Sailor].
+  /// To retrieve these arguments use [args] method on [Sailor].
   ///
   /// [navigationType] can be specified to choose from various navigation
   /// strategies such as [NavigationType.push], [NavigationType.pushReplace],
@@ -116,7 +131,6 @@ class Sailor {
   /// pages. [transitionDuration] and [transitionCurve] are duration and curve
   /// used for these transitions.
   Future<T> navigate<T>(
-    BuildContext context,
     String name, {
     BaseArguments args,
     NavigationType navigationType = NavigationType.push,
@@ -126,16 +140,14 @@ class Sailor {
     Duration transitionDuration,
     Curve transitionCurve,
   }) {
-    assert(context != null);
     assert(name != null);
     assert(navigationType != null);
     assert(navigationType != NavigationType.pushAndRemoveUntil ||
         removeUntilPredicate != null);
 
-    _checkAndThrowRouteNotFound(context, name, args, navigationType);
+    _checkAndThrowRouteNotFound(name, args, navigationType);
 
     return _navigate(
-      context,
       name,
       args,
       navigationType,
@@ -152,10 +164,8 @@ class Sailor {
   /// [routeArgsPairs] is a list of [RouteArgsPair]. Each [RouteArgsPair]
   /// contains the name of a route and its corresponding argument (if any).
   Future<List> navigateMultiple(
-    BuildContext context,
     List<RouteArgsPair> routeArgsPairs,
   ) {
-    assert(context != null);
     assert(routeArgsPairs != null);
     assert(routeArgsPairs.isNotEmpty);
 
@@ -165,7 +175,6 @@ class Sailor {
     // Push the route.
     routeArgsPairs.forEach((routeArgs) {
       _checkAndThrowRouteNotFound(
-        context,
         routeArgs.name,
         routeArgs.args,
         // TODO(gurleensethi): Give user the ability to use any type of NavigationType
@@ -173,7 +182,6 @@ class Sailor {
       );
 
       final response = _navigate(
-        context,
         routeArgs.name,
         routeArgs.args,
         // TODO(gurleensethi): Give user the ability to use any type of NavigationType
@@ -209,7 +217,6 @@ class Sailor {
   /// pages. [transitionDuration] and [transitionCurve] are duration and curve
   /// used for these transitions.
   Future<dynamic> _navigate(
-    BuildContext context,
     String name,
     BaseArguments args,
     NavigationType navigationType,
@@ -229,31 +236,28 @@ class Sailor {
     switch (navigationType) {
       case NavigationType.push:
         {
-          return Navigator.of(context).pushNamed(name, arguments: argsWrapper);
+          return this
+              .navigatorKey
+              .currentState
+              .pushNamed(name, arguments: argsWrapper);
         }
       case NavigationType.pushReplace:
         {
-          return Navigator.of(context).pushReplacementNamed(
-            name,
-            result: result,
-            arguments: argsWrapper,
-          );
+          return this.navigatorKey.currentState.pushReplacementNamed(name,
+              result: result, arguments: argsWrapper);
         }
       case NavigationType.pushAndRemoveUntil:
         {
-          return Navigator.of(context).pushNamedAndRemoveUntil(
-            name,
-            removeUntilPredicate,
-            arguments: argsWrapper,
-          );
+          return this.navigatorKey.currentState.pushNamedAndRemoveUntil(
+              name, removeUntilPredicate,
+              arguments: argsWrapper);
         }
       case NavigationType.popAndPushNamed:
         {
-          return Navigator.of(context).popAndPushNamed(
-            name,
-            result: result,
-            arguments: argsWrapper,
-          );
+          return this
+              .navigatorKey
+              .currentState
+              .popAndPushNamed(name, result: result, arguments: argsWrapper);
         }
     }
 
@@ -263,17 +267,15 @@ class Sailor {
   /// If the route is not registered throw an error
   /// Make sure to use the correct name while calling navigate.
   void _checkAndThrowRouteNotFound(
-    BuildContext context,
     String name,
     BaseArguments args,
     NavigationType navigationType,
   ) {
-    assert(context != null);
     assert(name != null);
 
     if (!_routeNameMappings.containsKey(name)) {
       if (this.options.handleNameNotFoundUI) {
-        Navigator.of(context).push(
+        this.navigatorKey.currentState.push(
           MaterialPageRoute(builder: (BuildContext context) {
             return PageNotFound(
               routeName: name,
@@ -288,14 +290,13 @@ class Sailor {
   }
 
   /// Delegation for [Navigator.pop].
-  static bool pop(BuildContext context, {dynamic result}) {
-    return Navigator.of(context).pop(result);
+  bool pop([dynamic result]) {
+    return this.navigatorKey.currentState.pop(result);
   }
 
   /// Delegation for [Navigator.popUntil].
-  static void popUntil(
-      BuildContext context, void Function(Route<dynamic>) predicate) {
-    Navigator.of(context).popUntil(predicate);
+  void popUntil(void Function(Route<dynamic>) predicate) {
+    this.navigatorKey.currentState.popUntil(predicate);
   }
 
   /// Generates the [RouteFactory] which builds a [Route] on request.

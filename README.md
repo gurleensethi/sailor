@@ -16,14 +16,14 @@ A Flutter package for easy navigation management.
 - [ ] Pretty printing navigation stack.
 
 ## Index
-- [Usage](#usage)
+- [Setup and Usage](#setup-and-usage)
 - [Passing Arguments](#passing-arguments)
 - [Transitions](#transitions)
 - [Pushing Multiple Routes](#pushing-multiple-routes)
 
-## Usage
+## Setup and Usage
 
-* Create an instance of `Sailor` and add routes.
+1. Create an instance of `Sailor` and add routes.
 
 ```dart
 // Routes class is created by you.
@@ -41,7 +41,23 @@ class Routes {
 }
 ```
 
-* Make sure to create routes before starting the application.
+2. Register the routes in `onGenerateRoute` using the `generate` function of `Sailor` and also `Sailor`'s `navigatorKey`.
+
+```dart
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Sailor Example',
+      home: Home(),
+      navigatorKey: Routes.sailor.navigatorKey,
+      onGenerateRoute: Routes.sailor.generator(),
+    );
+  }
+}
+```
+
+3. Make sure to create routes before starting the application.
 
 ```dart
 void main() async {
@@ -50,31 +66,16 @@ void main() async {
 }
 ```
 
-* Register the routes in `onGenerateRoute` using the `generate` function of `Sailor`.
+4. Use the instance of `Sailor` to navigate.
 
 ```dart
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Compass Example',
-      home: Home(),
-      onGenerateRoute: Routes.sailor.generator(),
-    );
-  }
-}
-```
-
-* Use the instance of `Sailor` to navigate.
-
-```dart
-Routes.sailor.navigate(context, "/secondPage");
+Routes.sailor.navigate("/secondPage");
 ```
 
 * TIP: `Sailor` is a callable class, so you can omit `navigate` and directly call the method.
 
 ```dart
-Routes.sailor(context, "/secondPage");
+Routes.sailor("/secondPage");
 ```
 
 ## Passing Arguments
@@ -95,7 +96,6 @@ class SecondPageArgs extends BaseArguments {
 ```dart
 
 final response = Routes.sailor.navigate(
-  context,
   "/secondPage",
   args: SecondPageArgs('Hey there'),
 );
@@ -107,7 +107,7 @@ final response = Routes.sailor.navigate(
 class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final args = Sailor.arguments<SecondPageArgs>(context);
+    final args = Sailor.args<SecondPageArgs>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -135,7 +135,6 @@ Specify which transitions to use when calling the `navigate` method.
 
 ```dart
 Routes.sailor.navigate(
-  context,
   "/secondPage",
   transitions: [SailorTransition.fade_in],
 );
@@ -145,7 +144,6 @@ More than one transition can be provided when navigating a single route. These t
 
 ```dart
 Routes.sailor.navigate(
-  context,
   "/secondPage",
   transitions: [
     SailorTransition.fade_in,
@@ -160,7 +158,6 @@ Routes.sailor.navigate(
 
 ```dart
 Routes.sailor.navigate(
-  context,
   "/secondPage",
   transitions: [
     SailorTransition.fade_in,
