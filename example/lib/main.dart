@@ -78,6 +78,12 @@ class Home extends StatelessWidget {
                 Routes.sailor.navigationStackObserver.prettyPrintStack();
               },
             ),
+            RaisedButton(
+              child: Text('Push Replace Page'),
+              onPressed: () async {
+                Routes.sailor.navigate("/pushReplacePage");
+              },
+            ),
           ],
         ),
       ),

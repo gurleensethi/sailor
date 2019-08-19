@@ -47,7 +47,7 @@ class Sailor {
   SailorStackObserver _navigationStackObserver = SailorStackObserver();
 
   SailorStackObserver get navigationStackObserver => _navigationStackObserver;
-
+  
   /// Get the registered routes names as a list.
   List<String> getRegisteredRouteNames() {
     return _routeNameMappings.keys.toList();
