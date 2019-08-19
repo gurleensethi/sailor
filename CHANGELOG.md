@@ -1,6 +1,9 @@
 ## [0.3.0] - August 2019
+* **BREAKING CHANGE**: `Sailor.arguments` method is removed and replaced with `Sailor.args`.
 
-* `SailorStackObserver` lets you get the current stack of rotues.
+## [0.3.0] - 19 August 2019
+
+* `SailorStackObserver` lets you get the current stack of routes.
 * Fix` crashing while retrieving `arguments` when using `NavigationType.pushAndRemoveUntil`.
 * Refactor logs in `SailorLoggingObserver`.
 
