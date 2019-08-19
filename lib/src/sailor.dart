@@ -315,7 +315,13 @@ class Sailor {
       if (route == null) return null;
 
       // TODO(gurleensethi): Check if this is a sailor route or a normal route.
-      final argsWrapper = settings.arguments as ArgumentsWrapper;
+      ArgumentsWrapper argsWrapper = settings.arguments as ArgumentsWrapper;
+
+      // If for some reason the arguments passed themself are null.
+      if (argsWrapper == null) {
+        argsWrapper = ArgumentsWrapper();
+      }
+
       final baseArgs = argsWrapper.baseArguments;
 
       // Select which transitions to use.

@@ -6,7 +6,7 @@
 
 ## [0.2.0] - 4 August 2019
 
-* **BREAKING CHANGE**: `Sailor` now uses a `navigatorKey` to carry out of navigation operations, so there is no need of `context` in any of sailor's instance methods. Make sure to add Sailor's `navigatorKey` in your `MaterialApp` or `CupertinoApp`.
+* **BREAKING CHANGE**: `Sailor` now uses a `navigatorKey` to carry out all navigation operations, there is no need of passing `context` any more in any of sailor's instance methods. Make sure to add Sailor's `navigatorKey` in your `MaterialApp` or `CupertinoApp`.
 
 ## [0.1.0] - 2 August 2019
 
