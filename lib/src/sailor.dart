@@ -74,20 +74,32 @@ class Sailor {
   static T param<T>(BuildContext context, String key) {
     final routeSettings = ModalRoute.of(context).settings;
     final argumentsWrapper = (routeSettings.arguments as ArgumentsWrapper);
+<<<<<<< HEAD
     final isParamNotRegistered = argumentsWrapper.routeParams == null ||
         !argumentsWrapper.routeParams.containsKey(key);
 
     if (isParamNotRegistered) {
+=======
+    if (argumentsWrapper.routeParams == null ||
+        !argumentsWrapper.routeParams.containsKey(key)) {
+>>>>>>> Add functionality to pass paramters.
       throw ParamNotRegisteredError(
         paramKey: key,
         routeName: routeSettings.name,
       );
     }
 
+<<<<<<< HEAD
     final defaultParamValue = argumentsWrapper.routeParams[key].defaultValue;
     final paramFromNavigationCall =
         argumentsWrapper.params != null ? argumentsWrapper.params[key] : null;
     return (paramFromNavigationCall ?? defaultParamValue) as T;
+=======
+    final sailorParam = argumentsWrapper.routeParams[key];
+    final paramFromNavigationCall =
+        argumentsWrapper.params != null ? argumentsWrapper.params[key] : null;
+    return (paramFromNavigationCall ?? sailorParam.defaultValue) as T;
+>>>>>>> Add functionality to pass paramters.
   }
 
   /// Add a new route to [Sailor].
@@ -279,6 +291,7 @@ class Sailor {
     final routeParams = _routeParamsMappings[name];
     if (routeParams != null) {
       routeParams.forEach((key, value) {
+<<<<<<< HEAD
         bool isMissingRequiredParam = value.isRequired &&
             (params == null || !params.containsKey(value.name));
 
@@ -287,6 +300,15 @@ class Sailor {
             paramKey: value.name,
             routeName: name,
           ).toString());
+=======
+        if (value.isRequired &&
+            (params == null || !params.containsKey(value.name))) {
+          print("WARNING: " +
+              ParameterNotProvidedError(
+                paramKey: value.name,
+                routeName: name,
+              ).toString());
+>>>>>>> Add functionality to pass paramters.
         }
       });
     }
