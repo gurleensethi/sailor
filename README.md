@@ -9,13 +9,21 @@ A Flutter package for easy navigation management.
 #### Warning: Package is still under development, there might be breaking changes in future.
 
 ## Roadmap
-- [x] Core Navigation Features
-- [x] Proper logging when navigating
-- [ ] Animations 
+- [x] Core Navigation Features.
+- [x] Proper logging when navigating.
+- [x] Basic Transitions and configuration.
+- [ ] More inbuilt transitions.
+- [ ] Pretty printing navigation stack.
 
-## Usage
+## Index
+- [Setup and Usage](#setup-and-usage)
+- [Passing Arguments](#passing-arguments)
+- [Transitions](#transitions)
+- [Pushing Multiple Routes](#pushing-multiple-routes)
 
-* Create an instance of `Sailor` and add routes.
+## Setup and Usage
+
+1. Create an instance of `Sailor` and add routes.
 
 ```dart
 // Routes class is created by you.
@@ -33,7 +41,23 @@ class Routes {
 }
 ```
 
-* Make sure to create routes before starting the application.
+2. Register the routes in `onGenerateRoute` using the `generate` function of `Sailor` and also `Sailor`'s `navigatorKey`.
+
+```dart
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Sailor Example',
+      home: Home(),
+      navigatorKey: Routes.sailor.navigatorKey,
+      onGenerateRoute: Routes.sailor.generator(),
+    );
+  }
+}
+```
+
+3. Make sure to create routes before starting the application.
 
 ```dart
 void main() async {
@@ -42,32 +66,17 @@ void main() async {
 }
 ```
 
-* Register the routes in `onGenerateRoute` using the `generate` function of `Sailor`.
+4. Use the instance of `Sailor` to navigate.
 
 ```dart
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Compass Example',
-      home: Home(),
-      onGenerateRoute: Routes.sailor.generator(),
-    );
-  }
-}
+Routes.sailor.navigate("/secondPage");
 ```
 
-* Use the instance of `Sailor` to navigate.
+* TIP: `Sailor` is a callable class, so you can omit `navigate` and directly call the method.
 
 ```dart
-Routes.sailor.navigate(context, "/secondPage");
+Routes.sailor("/secondPage");
 ```
-
-* TIP: `Sailor` is a callable class, so you omit `navigate` and directly call the method.
-
-```dart
-Routes.sailor(context, "/secondPage");
-``` 
 
 ## Passing Arguments
 `Sailor` allows you to pass arguments to the page that you are navigating to.
@@ -87,7 +96,6 @@ class SecondPageArgs extends BaseArguments {
 ```dart
 
 final response = Routes.sailor.navigate(
-  context,
   "/secondPage",
   args: SecondPageArgs('Hey there'),
 );
@@ -99,7 +107,7 @@ final response = Routes.sailor.navigate(
 class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final args = Sailor.arguments<SecondPageArgs>(context);
+    final args = Sailor.args<SecondPageArgs>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -112,6 +120,89 @@ class SecondPage extends StatelessWidget {
   }
 }
 ```
+
+## Transitions
+Sailor has inbuilt support for page transitions. A transition is specified using `SailorTransition`.
+
+Transition can be specified at 3 levels (ordered in priority from highest to lowest):
+
+- When Navigating (using `Sailor.navigate`).
+- While adding routes (`SailorRoute`).
+- Global transitions (`SailorOptions`).
+
+### When navigating
+Specify which transitions to use when calling the `navigate` method.
+
+```dart
+Routes.sailor.navigate(
+  "/secondPage",
+  transitions: [SailorTransition.fade_in],
+);
+```
+
+More than one transition can be provided when navigating a single route. These transitions are composed on top of each other, so in some cases changing the order will change the animation.
+
+```dart
+Routes.sailor.navigate(
+  "/secondPage",
+  transitions: [
+    SailorTransition.fade_in,
+    SailorTransition.slide_from_right,
+  ],
+  transitionDuration: Duration(milliseconds: 500),
+  transitionCurve: Curves.bounceOut,
+);
+```
+
+`Duration` and `Curve` can be provided using `transitionDuration` and `transitionCurve` respectively.
+
+```dart
+Routes.sailor.navigate(
+  "/secondPage",
+  transitions: [
+    SailorTransition.fade_in,
+    SailorTransition.slide_from_right,
+  ],
+  transitionDuration: Duration(milliseconds: 500),
+  transitionCurve: Curves.bounceOut,
+);
+```
+
+In the above example the page will slide in from right with a fade in animation. You can specify as many transitions as you want.
+
+### When adding routes
+You can specify the default transition for a route, so you don't have to specify it again and again when navigating.
+
+```dart
+sailor.addRoute(SailorRoute(
+  name: "/secondPage",
+  defaultTransitions: [
+    SailorTransition.slide_from_bottom,
+    SailorTransition.zoom_in,
+  ],
+  defaultTransitionCurve: Curves.decelerate,
+  defaultTransitionDuration: Duration(milliseconds: 500),
+  builder: (context, args) => SecondPage(),
+));
+```
+
+Priority: Transitions provided in `Sailor.navigate` while navigating to this route, will override these transitions.
+
+### Global transitions
+You can specify default transition to be used for all routes in `Sailor`.
+
+```dart
+SailorOptions(
+  defaultTransitions: [
+    SailorTransition.slide_from_bottom,
+    SailorTransition.zoom_in,
+  ],
+  defaultTransitionCurve: Curves.decelerate,
+  defaultTransitionDuration: Duration(milliseconds: 500),
+)
+```
+
+Priority: Transitions provided while adding a route or when navigating using `navigate`, will override these transitions.
 
 ## Pushing Multiple Routes
 
@@ -129,7 +220,7 @@ print("Third Page Response ${responses[1]}");
 
 ## Log Navigation
 Use `SailorLoggingObserver` to log the `push`/`pop` navigation inside the application.
-Add the `SailorLoggingObserver` to the `navigatorObservers` list inside your `MaterialApp`. 
+Add the `SailorLoggingObserver` to the `navigatorObservers` list inside your `MaterialApp`.
 
 ```dart
 class App extends StatelessWidget {
@@ -155,5 +246,5 @@ flutter: [Sailor] Route Popped: (New Route='/', Popped Route='/secondPage', New 
 ```
 
 ## Support
-If you face any issue or want a new feature to be added to the package, please [create an issue](https://github.com/gurleensethi/sailor/issues/new). 
+If you face any issue or want a new feature to be added to the package, please [create an issue](https://github.com/gurleensethi/sailor/issues/new).
 I will be more than happy to resolve your queries.
