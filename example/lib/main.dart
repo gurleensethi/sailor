@@ -36,12 +36,12 @@ class Home extends StatelessWidget {
             RaisedButton(
               child: Text('Open Second Page'),
               onPressed: () async {
-                final response = await Routes.sailor.navigate<bool>(
-                  "/secondPage",
-                  transitions: [
-                    SailorTransition.slide_from_top,
-                  ],
-                );
+                final response = await Routes.sailor
+                    .navigate<bool>("/secondPage", transitions: [
+                  SailorTransition.slide_from_top,
+                ], params: {
+                  'id': 123,
+                });
 
                 print("Response from SecondPage: $response");
               },
@@ -101,6 +101,7 @@ class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = Sailor.args<SecondPageArgs>(context);
+    final id = Sailor.param<int>(context, 'id');
 
     return Scaffold(
       appBar: AppBar(
@@ -111,6 +112,7 @@ class SecondPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(args?.text ?? 'Second Page'),
+            Text("Param('id'): $id"),
             RaisedButton(
               child: Text('Close Page'),
               onPressed: () {
@@ -235,6 +237,12 @@ class Routes {
         name: "/secondPage",
         builder: (context, args) => SecondPage(),
         defaultArgs: SecondPageArgs('From default arguments!'),
+        params: [
+          SailorParam(
+            name: 'id',
+            defaultValue: 1234,
+          ),
+        ],
         defaultTransitions: [
           SailorTransition.slide_from_bottom,
           SailorTransition.zoom_in,
