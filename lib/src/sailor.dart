@@ -5,6 +5,7 @@ import 'package:sailor/src/models/arguments_wrapper.dart';
 import 'package:sailor/src/models/base_arguments.dart';
 import 'package:sailor/src/models/sailor_options.dart';
 import 'package:sailor/src/models/sailor_route.dart';
+import 'package:sailor/src/navigator_observers/sailor_stack_observer.dart';
 import 'package:sailor/src/transitions/sailor_transition.dart';
 import 'package:sailor/src/transitions/transition_factory.dart';
 import 'package:sailor/src/ui/page_not_found.dart';
@@ -43,6 +44,10 @@ class Sailor {
 
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
 
+  SailorStackObserver _navigationStackObserver = SailorStackObserver();
+
+  SailorStackObserver get navigationStackObserver => _navigationStackObserver;
+  
   /// Get the registered routes names as a list.
   List<String> getRegisteredRouteNames() {
     return _routeNameMappings.keys.toList();
@@ -310,7 +315,13 @@ class Sailor {
       if (route == null) return null;
 
       // TODO(gurleensethi): Check if this is a sailor route or a normal route.
-      final argsWrapper = settings.arguments as ArgumentsWrapper;
+      ArgumentsWrapper argsWrapper = settings.arguments as ArgumentsWrapper;
+
+      // If for some reason the arguments passed themself are null.
+      if (argsWrapper == null) {
+        argsWrapper = ArgumentsWrapper();
+      }
+
       final baseArgs = argsWrapper.baseArguments;
 
       // Select which transitions to use.
@@ -338,13 +349,17 @@ class Sailor {
           route.defaultTransitionCurve ??
           this.options.defaultTransitionCurve;
 
+      RouteSettings routeSettings = RouteSettings(
+        name: settings.name,
+        isInitialRoute: settings.isInitialRoute,
+        arguments: baseArgs != null ? baseArgs : route.defaultArgs,
+      );
+
       return TransitionFactory.buildTransition(
         transitions: transitions,
         duration: transitionDuration,
         curve: transitionCurve,
-        settings: baseArgs != null
-            ? settings.copyWith(arguments: baseArgs)
-            : settings.copyWith(arguments: route.defaultArgs),
+        settings: routeSettings,
         builder: (context) =>
             route.builder(context, baseArgs ?? route.defaultArgs),
       );
