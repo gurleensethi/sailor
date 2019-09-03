@@ -12,7 +12,6 @@ import 'package:sailor/src/navigator_observers/sailor_stack_observer.dart';
 import 'package:sailor/src/transitions/sailor_transition.dart';
 import 'package:sailor/src/transitions/transition_factory.dart';
 import 'package:sailor/src/ui/page_not_found.dart';
-
 import 'models/route_args_pair.dart';
 
 enum NavigationType { push, pushReplace, pushAndRemoveUntil, popAndPushNamed }
@@ -75,18 +74,20 @@ class Sailor {
   static T param<T>(BuildContext context, String key) {
     final routeSettings = ModalRoute.of(context).settings;
     final argumentsWrapper = (routeSettings.arguments as ArgumentsWrapper);
-    if (argumentsWrapper.routeParams == null ||
-        !argumentsWrapper.routeParams.containsKey(key)) {
+    final isParamNotRegistered = argumentsWrapper.routeParams == null ||
+        !argumentsWrapper.routeParams.containsKey(key);
+
+    if (isParamNotRegistered) {
       throw ParamNotRegisteredError(
         paramKey: key,
         routeName: routeSettings.name,
       );
     }
 
-    final sailorParam = argumentsWrapper.routeParams[key];
+    final defaultParamValue = argumentsWrapper.routeParams[key].defaultValue;
     final paramFromNavigationCall =
         argumentsWrapper.params != null ? argumentsWrapper.params[key] : null;
-    return (paramFromNavigationCall ?? sailorParam.defaultValue) as T;
+    return (paramFromNavigationCall ?? defaultParamValue) as T;
   }
 
   /// Add a new route to [Sailor].
@@ -170,6 +171,8 @@ class Sailor {
   /// [transitions] is a list of transitions to be used when switching between
   /// pages. [transitionDuration] and [transitionCurve] are duration and curve
   /// used for these transitions.
+  ///
+  /// [params] are key pair values that can be passed when navigating to a route.
   Future<T> navigate<T>(
     String name, {
     BaseArguments args,
@@ -259,6 +262,8 @@ class Sailor {
   /// [transitions] is a list of transitions to be used when switching between
   /// pages. [transitionDuration] and [transitionCurve] are duration and curve
   /// used for these transitions.
+  ///
+  /// [params] are key pair values that can be passed when navigating to a route.
   Future<dynamic> _navigate(
     String name,
     BaseArguments args,
@@ -274,13 +279,14 @@ class Sailor {
     final routeParams = _routeParamsMappings[name];
     if (routeParams != null) {
       routeParams.forEach((key, value) {
-        if (value.isRequired &&
-            (params == null || !params.containsKey(value.name))) {
-          print("WARNING: " +
-              ParameterNotProvidedError(
-                paramKey: value.name,
-                routeName: name,
-              ).toString());
+        bool isMissingRequiredParam = value.isRequired &&
+            (params == null || !params.containsKey(value.name));
+
+        if (isMissingRequiredParam) {
+          AppLogger.instance.warning(ParameterNotProvidedError(
+            paramKey: value.name,
+            routeName: name,
+          ).toString());
         }
       });
     }
@@ -418,8 +424,15 @@ class Sailor {
         duration: transitionDuration,
         curve: transitionCurve,
         settings: routeSettings,
-        builder: (context) =>
-            route.builder(context, baseArgs ?? route.defaultArgs),
+        builder: (context) => route.builder(
+          context,
+          baseArgs ?? route.defaultArgs,
+          ParamMap(
+            route.name,
+            argsWrapper.routeParams,
+            argsWrapper.params,
+          ),
+        ),
       );
     };
   }
@@ -436,5 +449,29 @@ class Sailor {
         },
       );
     };
+  }
+}
+
+class ParamMap {
+  final String _routeName;
+  final Map<String, SailorParam> _routeParams;
+  final Map<String, dynamic> _params;
+
+  ParamMap(this._routeName, this._routeParams, this._params);
+
+  T param<T>(String key) {
+    final isParamNotRegistered =
+        _routeParams == null || !_routeParams.containsKey(key);
+
+    if (isParamNotRegistered) {
+      throw ParamNotRegisteredError(
+        paramKey: key,
+        routeName: this._routeName,
+      );
+    }
+
+    final defaultParamValue = _routeParams[key].defaultValue;
+    final paramFromNavigationCall = _params != null ? _params[key] : null;
+    return (paramFromNavigationCall ?? defaultParamValue) as T;
   }
 }

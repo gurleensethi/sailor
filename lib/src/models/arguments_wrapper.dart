@@ -9,6 +9,12 @@ class ArgumentsWrapper {
   final Duration transitionDuration;
   final Curve transitionCurve;
   final Map<String, dynamic> params;
+
+  /// Route params that are initially defined for the Route.
+  /// Note: These are needed here, because user must be able to retrieve
+  /// params from within the launched route. Since the only thing available
+  /// from inside a launched route are arguments, these paramters are provided
+  /// along with the arguments.
   final Map<String, SailorParam> routeParams;
 
   ArgumentsWrapper({

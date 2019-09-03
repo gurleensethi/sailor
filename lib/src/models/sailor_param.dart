@@ -7,7 +7,8 @@ class SailorParam {
     this.name,
     this.defaultValue,
     this.isRequired = false,
-  }) : assert(isRequired != null);
+  })  : assert(name != null),
+        assert(isRequired != null);
 
   @override
   operator ==(Object other) =>

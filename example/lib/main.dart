@@ -235,7 +235,7 @@ class Routes {
     sailor.addRoutes([
       SailorRoute(
         name: "/secondPage",
-        builder: (context, args) => SecondPage(),
+        builder: (context, args, params) => SecondPage(),
         defaultArgs: SecondPageArgs('From default arguments!'),
         params: [
           SailorParam(
@@ -250,12 +250,12 @@ class Routes {
       ),
       SailorRoute(
         name: "/thirdPage",
-        builder: (context, args) => ThirdPage(),
+        builder: (context, args, params) => ThirdPage(),
         defaultTransitions: [SailorTransition.slide_from_left],
       ),
       SailorRoute(
         name: "/pushReplacePage",
-        builder: (context, args) => PushReplacePage(),
+        builder: (context, args, params) => PushReplacePage(),
       ),
     ]);
   }
