@@ -75,20 +75,27 @@ class Sailor {
     final routeSettings = ModalRoute.of(context).settings;
     final argumentsWrapper = (routeSettings.arguments as ArgumentsWrapper);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Complete basic SailorParam feature, Param passing documentation.
     final isParamNotRegistered = argumentsWrapper.routeParams == null ||
         !argumentsWrapper.routeParams.containsKey(key);
 
     if (isParamNotRegistered) {
+<<<<<<< HEAD
 =======
     if (argumentsWrapper.routeParams == null ||
         !argumentsWrapper.routeParams.containsKey(key)) {
 >>>>>>> Add functionality to pass paramters.
+=======
+>>>>>>> Complete basic SailorParam feature, Param passing documentation.
       throw ParamNotRegisteredError(
         paramKey: key,
         routeName: routeSettings.name,
       );
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     final defaultParamValue = argumentsWrapper.routeParams[key].defaultValue;
     final paramFromNavigationCall =
@@ -100,6 +107,12 @@ class Sailor {
         argumentsWrapper.params != null ? argumentsWrapper.params[key] : null;
     return (paramFromNavigationCall ?? sailorParam.defaultValue) as T;
 >>>>>>> Add functionality to pass paramters.
+=======
+    final defaultParamValue = argumentsWrapper.routeParams[key].defaultValue;
+    final paramFromNavigationCall =
+        argumentsWrapper.params != null ? argumentsWrapper.params[key] : null;
+    return (paramFromNavigationCall ?? defaultParamValue) as T;
+>>>>>>> Complete basic SailorParam feature, Param passing documentation.
   }
 
   /// Add a new route to [Sailor].
@@ -292,6 +305,9 @@ class Sailor {
     if (routeParams != null) {
       routeParams.forEach((key, value) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Complete basic SailorParam feature, Param passing documentation.
         bool isMissingRequiredParam = value.isRequired &&
             (params == null || !params.containsKey(value.name));
 
@@ -300,6 +316,7 @@ class Sailor {
             paramKey: value.name,
             routeName: name,
           ).toString());
+<<<<<<< HEAD
 =======
         if (value.isRequired &&
             (params == null || !params.containsKey(value.name))) {
@@ -309,6 +326,8 @@ class Sailor {
                 routeName: name,
               ).toString());
 >>>>>>> Add functionality to pass paramters.
+=======
+>>>>>>> Complete basic SailorParam feature, Param passing documentation.
         }
       });
     }
