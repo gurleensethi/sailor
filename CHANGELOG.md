@@ -1,3 +1,7 @@
+## [0.4.0] - 3 September 2019
+
+* Add support for passing parameters when navigating route.
+
 ## [0.3.0] - August 2019
 * **BREAKING CHANGE**: `Sailor.arguments` method is removed and replaced with `Sailor.args`.
 
