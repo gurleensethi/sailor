@@ -1,15 +1,17 @@
+import 'package:sailor/src/errors/param_not_provided.dart';
+import 'package:sailor/src/errors/param_not_registered.dart';
 import 'package:sailor/src/errors/route_not_found.dart';
 import 'package:flutter/material.dart';
 import 'package:sailor/src/logger/app_logger.dart';
 import 'package:sailor/src/models/arguments_wrapper.dart';
 import 'package:sailor/src/models/base_arguments.dart';
 import 'package:sailor/src/models/sailor_options.dart';
+import 'package:sailor/src/models/sailor_param.dart';
 import 'package:sailor/src/models/sailor_route.dart';
 import 'package:sailor/src/navigator_observers/sailor_stack_observer.dart';
 import 'package:sailor/src/transitions/sailor_transition.dart';
 import 'package:sailor/src/transitions/transition_factory.dart';
 import 'package:sailor/src/ui/page_not_found.dart';
-
 import 'models/route_args_pair.dart';
 
 enum NavigationType { push, pushReplace, pushAndRemoveUntil, popAndPushNamed }
@@ -33,6 +35,9 @@ class Sailor {
   /// Used to generate routes
   Map<String, SailorRoute> _routeNameMappings = {};
 
+  /// Store all the mappings of route names and corresponding [SailorParam]s
+  Map<String, Map<String, SailorParam>> _routeParamsMappings = {};
+
   /// A navigator key lets Sailor grab the [NavigatorState] from a [MaterialApp]
   /// or a [CupertinoApp]. All navigation operations (push, pop, etc) are carried
   /// out using this [NavigatorState].
@@ -47,7 +52,7 @@ class Sailor {
   SailorStackObserver _navigationStackObserver = SailorStackObserver();
 
   SailorStackObserver get navigationStackObserver => _navigationStackObserver;
-  
+
   /// Get the registered routes names as a list.
   List<String> getRegisteredRouteNames() {
     return _routeNameMappings.keys.toList();
@@ -61,14 +66,28 @@ class Sailor {
   /// Make sure to provide the appropriate type, that is, provide the same type
   /// as the one passed while calling [navigate], else a cast error will be
   /// thrown.
-  @Deprecated('Use \'args\' instead.')
-  static T arguments<T extends BaseArguments>(BuildContext context) {
-    return ModalRoute.of(context).settings.arguments as T;
+  static T args<T extends BaseArguments>(BuildContext context) {
+    return (ModalRoute.of(context).settings.arguments as ArgumentsWrapper)
+        .baseArguments as T;
   }
 
-  /// Alias for [arguments].
-  static T args<T extends BaseArguments>(BuildContext context) {
-    return ModalRoute.of(context).settings.arguments as T;
+  static T param<T>(BuildContext context, String key) {
+    final routeSettings = ModalRoute.of(context).settings;
+    final argumentsWrapper = (routeSettings.arguments as ArgumentsWrapper);
+    final isParamNotRegistered = argumentsWrapper.routeParams == null ||
+        !argumentsWrapper.routeParams.containsKey(key);
+
+    if (isParamNotRegistered) {
+      throw ParamNotRegisteredError(
+        paramKey: key,
+        routeName: routeSettings.name,
+      );
+    }
+
+    final defaultParamValue = argumentsWrapper.routeParams[key].defaultValue;
+    final paramFromNavigationCall =
+        argumentsWrapper.params != null ? argumentsWrapper.params[key] : null;
+    return (paramFromNavigationCall ?? defaultParamValue) as T;
   }
 
   /// Add a new route to [Sailor].
@@ -85,7 +104,22 @@ class Sailor {
           "'${route.name}' has already been registered before. Overriding it!");
     }
 
+    // Prepare route params
+    final routeParams = <String, SailorParam>{};
+
+    if (route.params != null) {
+      route.params.forEach((sailorParam) {
+        if (routeParams.containsKey(sailorParam.name)) {
+          AppLogger.instance.warning(
+              "'${sailorParam.name}' param has already been specified for route $route. Overriding it!");
+        }
+
+        routeParams[sailorParam.name] = sailorParam;
+      });
+    }
+
     _routeNameMappings[route.name] = route;
+    _routeParamsMappings[route.name] = routeParams;
   }
 
   /// Add a list of routes at once.
@@ -106,6 +140,7 @@ class Sailor {
     bool Function(Route<dynamic> route) removeUntilPredicate,
     List<SailorTransition> transitions,
     Duration transitionDuration,
+    Map<String, dynamic> params,
   }) {
     return navigate<T>(
       name,
@@ -115,6 +150,7 @@ class Sailor {
       args: args,
       transitions: transitions,
       transitionDuration: transitionDuration,
+      params: params,
     );
   }
 
@@ -135,6 +171,8 @@ class Sailor {
   /// [transitions] is a list of transitions to be used when switching between
   /// pages. [transitionDuration] and [transitionCurve] are duration and curve
   /// used for these transitions.
+  ///
+  /// [params] are key pair values that can be passed when navigating to a route.
   Future<T> navigate<T>(
     String name, {
     BaseArguments args,
@@ -144,6 +182,7 @@ class Sailor {
     List<SailorTransition> transitions,
     Duration transitionDuration,
     Curve transitionCurve,
+    Map<String, dynamic> params,
   }) {
     assert(name != null);
     assert(navigationType != null);
@@ -161,6 +200,7 @@ class Sailor {
       transitions,
       transitionDuration,
       transitionCurve,
+      params,
     ).then((value) => value as T);
   }
 
@@ -196,6 +236,7 @@ class Sailor {
         routeArgs.transitions,
         routeArgs.transitionDuration,
         routeArgs.transitionCurve,
+        null,
       );
 
       pageResponses.add(response);
@@ -221,6 +262,8 @@ class Sailor {
   /// [transitions] is a list of transitions to be used when switching between
   /// pages. [transitionDuration] and [transitionCurve] are duration and curve
   /// used for these transitions.
+  ///
+  /// [params] are key pair values that can be passed when navigating to a route.
   Future<dynamic> _navigate(
     String name,
     BaseArguments args,
@@ -230,12 +273,31 @@ class Sailor {
     List<SailorTransition> transitions,
     Duration transitionDuration,
     Curve transitionCurve,
+    Map<String, dynamic> params,
   ) {
+    // Check if all the required parameters are provided
+    final routeParams = _routeParamsMappings[name];
+    if (routeParams != null) {
+      routeParams.forEach((key, value) {
+        bool isMissingRequiredParam = value.isRequired &&
+            (params == null || !params.containsKey(value.name));
+
+        if (isMissingRequiredParam) {
+          AppLogger.instance.warning(ParameterNotProvidedError(
+            paramKey: value.name,
+            routeName: name,
+          ).toString());
+        }
+      });
+    }
+
     final argsWrapper = ArgumentsWrapper(
       baseArguments: args,
       transitions: transitions,
       transitionDuration: transitionDuration,
       transitionCurve: transitionCurve,
+      params: params,
+      routeParams: _routeParamsMappings[name],
     );
 
     switch (navigationType) {
@@ -352,7 +414,9 @@ class Sailor {
       RouteSettings routeSettings = RouteSettings(
         name: settings.name,
         isInitialRoute: settings.isInitialRoute,
-        arguments: baseArgs != null ? baseArgs : route.defaultArgs,
+        arguments: argsWrapper.copyWith(
+          baseArguments: baseArgs != null ? baseArgs : route.defaultArgs,
+        ),
       );
 
       return TransitionFactory.buildTransition(
@@ -360,8 +424,15 @@ class Sailor {
         duration: transitionDuration,
         curve: transitionCurve,
         settings: routeSettings,
-        builder: (context) =>
-            route.builder(context, baseArgs ?? route.defaultArgs),
+        builder: (context) => route.builder(
+          context,
+          baseArgs ?? route.defaultArgs,
+          ParamMap(
+            route.name,
+            argsWrapper.routeParams,
+            argsWrapper.params,
+          ),
+        ),
       );
     };
   }
@@ -378,5 +449,29 @@ class Sailor {
         },
       );
     };
+  }
+}
+
+class ParamMap {
+  final String _routeName;
+  final Map<String, SailorParam> _routeParams;
+  final Map<String, dynamic> _params;
+
+  ParamMap(this._routeName, this._routeParams, this._params);
+
+  T param<T>(String key) {
+    final isParamNotRegistered =
+        _routeParams == null || !_routeParams.containsKey(key);
+
+    if (isParamNotRegistered) {
+      throw ParamNotRegisteredError(
+        paramKey: key,
+        routeName: this._routeName,
+      );
+    }
+
+    final defaultParamValue = _routeParams[key].defaultValue;
+    final paramFromNavigationCall = _params != null ? _params[key] : null;
+    return (paramFromNavigationCall ?? defaultParamValue) as T;
   }
 }

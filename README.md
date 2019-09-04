@@ -33,7 +33,7 @@ class Routes {
   static void createRoutes() {
     sailor.addRoute(SailorRoute(
         name: "/secondPage",
-        builder: (context, args) {
+        builder: (context, args, params) {
           return SecondPage();
         },
       ));
@@ -78,6 +78,71 @@ Routes.sailor.navigate("/secondPage");
 Routes.sailor("/secondPage");
 ```
 
+## Passing parameters
+`Sailor` allows you to pass parameters to the page that you are navigating to.
+
+- Before passing the parameter itself, you need to declare it while declaring your route. Let's declare a parameter named `id` that has a default value of `1234`.
+
+```dart
+sailor.addRoutes([
+  SailorRoute(
+    name: "/secondPage",
+    builder: (context, args, params) => SecondPage(),
+    params: [
+      SailorParam(
+        name: 'id',
+        defaultValue: 1234,
+      ),
+    ],
+  ),
+);
+```
+
+- Pass the actual parameter when navigating to the new route.
+
+```dart
+Routes.sailor.navigate<bool>("/secondPage", params: {
+  'id': 4321,
+});
+```
+
+- Parameters can be retrieved from two places, first, the route builder and second, the opened page itself.
+
+**Route Builder:**
+
+```dart
+sailor.addRoutes([
+  SailorRoute(
+    name: "/secondPage",
+    builder: (context, args, params) {
+      // Getting a param
+      final id = params.param<int>('id');
+      return SecondPage();
+    },
+    params: [
+      SailorParam(
+        name: 'id',
+        defaultValue: 1234,
+      ),
+    ],
+  ),
+);
+```
+
+**Opened page:**
+
+```dart
+class SecondPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final id = Sailor.param<int>(context, 'id');
+
+    ...
+
+  }
+}
+```
+
 ## Passing Arguments
 `Sailor` allows you to pass arguments to the page that you are navigating to.
 
@@ -94,7 +159,6 @@ class SecondPageArgs extends BaseArguments {
 * When calling the `navigate` method pass these arguments.
 
 ```dart
-
 final response = Routes.sailor.navigate(
   "/secondPage",
   args: SecondPageArgs('Hey there'),
