@@ -81,7 +81,7 @@ Routes.sailor("/secondPage");
 ## Passing parameters
 `Sailor` allows you to pass parameters to the page that you are navigating to.
 
-- Before passing the argument, you need to declare it while declaring your route. Let's declare a parameter named `id` that has a default value of `1234`.
+- Before passing the parameter itself, you need to declare it while declaring your route. Let's declare a parameter named `id` that has a default value of `1234`.
 
 ```dart
 sailor.addRoutes([
