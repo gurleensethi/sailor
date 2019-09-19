@@ -1,6 +1,7 @@
 import 'package:flutter/animation.dart';
 import 'package:sailor/src/models/base_arguments.dart';
 import 'package:sailor/src/models/sailor_param.dart';
+import 'package:sailor/src/transitions/custom_sailor_transition.dart';
 import 'package:sailor/src/transitions/sailor_transition.dart';
 
 class ArgumentsWrapper {
@@ -17,6 +18,8 @@ class ArgumentsWrapper {
   /// along with the arguments.
   final Map<String, SailorParam> routeParams;
 
+  final CustomSailorTransition customTransition;
+
   ArgumentsWrapper({
     this.baseArguments,
     this.transitions,
@@ -24,6 +27,7 @@ class ArgumentsWrapper {
     this.transitionCurve,
     this.params,
     this.routeParams,
+    this.customTransition,
   });
 
   ArgumentsWrapper copyWith({
@@ -33,6 +37,7 @@ class ArgumentsWrapper {
     Curve transitionCurve,
     List<SailorParam> params,
     Map<String, SailorParam> routeParams,
+    CustomSailorTransition customTransition,
   }) {
     return ArgumentsWrapper(
       baseArguments: baseArguments ?? this.baseArguments,
@@ -41,6 +46,7 @@ class ArgumentsWrapper {
       transitionCurve: transitionCurve ?? this.transitionCurve,
       params: params ?? this.params,
       routeParams: routeParams ?? this.routeParams,
+      customTransition: customTransition ?? this.customTransition,
     );
   }
 
@@ -50,6 +56,7 @@ class ArgumentsWrapper {
         'transitions: $transitions, '
         'transitionDuration: $transitionDuration, '
         'transitionCurve: $transitionCurve}, '
-        'params: $params';
+        'params: $params, '
+        'customTransition: $customTransition';
   }
 }

@@ -7,6 +7,7 @@ class RouteArgsPair {
   final List<SailorTransition> transitions;
   final Duration transitionDuration;
   final Curve transitionCurve;
+  final CustomSailorTransition customTransition;
 
   RouteArgsPair(
     this.name, {
@@ -14,5 +15,6 @@ class RouteArgsPair {
     this.transitions,
     this.transitionDuration,
     this.transitionCurve,
+    this.customTransition,
   });
 }
