@@ -167,6 +167,7 @@ class Sailor {
     List<SailorTransition> transitions,
     Duration transitionDuration,
     Map<String, dynamic> params,
+    CustomSailorTransition customTransition,
   }) {
     return navigate<T>(
       name,
@@ -177,6 +178,7 @@ class Sailor {
       transitions: transitions,
       transitionDuration: transitionDuration,
       params: params,
+      customTransition: customTransition,
     );
   }
 
@@ -202,7 +204,7 @@ class Sailor {
   ///
   /// Provide a custom transition with [customTransition] to sailor instead of using
   /// inbuilt transitions, if not provided, sailor will revert to use its default
-  /// transitions or delegate to systems own transitions.
+  /// transitions or delegate to system's own transitions.
   Future<T> navigate<T>(
     String name, {
     BaseArguments args,
@@ -232,6 +234,7 @@ class Sailor {
       transitionDuration,
       transitionCurve,
       params,
+      customTransition,
     ).then((value) => value as T);
   }
 
@@ -268,6 +271,7 @@ class Sailor {
         routeArgs.transitionDuration,
         routeArgs.transitionCurve,
         null,
+        routeArgs.customTransition,
       );
 
       pageResponses.add(response);
@@ -305,6 +309,7 @@ class Sailor {
     Duration transitionDuration,
     Curve transitionCurve,
     Map<String, dynamic> params,
+    CustomSailorTransition customTransition,
   ) {
     // Check if all the required parameters are provided
     final routeParams = _routeParamsMappings[name];
@@ -345,6 +350,7 @@ class Sailor {
       transitionCurve: transitionCurve,
       params: params,
       routeParams: _routeParamsMappings[name],
+      customTransition: customTransition,
     );
 
     switch (navigationType) {
@@ -431,7 +437,7 @@ class Sailor {
         argsWrapper = ArgumentsWrapper();
       }
 
-      final baseArgs = argsWrapper.baseArguments;
+      final BaseArguments baseArgs = argsWrapper.baseArguments;
 
       // Select which transitions to use.
       // Priority:
@@ -440,13 +446,19 @@ class Sailor {
       //   3. Default transition from SailorOptions.
       final List<SailorTransition> transitions = [];
 
-      if (argsWrapper.transitions != null &&
-          argsWrapper.transitions.isNotEmpty) {
+      final bool areTransitionsProvidedInNavigate =
+          argsWrapper.transitions != null && argsWrapper.transitions.isNotEmpty;
+      final bool areTransitionsProvidedInRouteDeclaration =
+          route.defaultTransitions != null &&
+              route.defaultTransitions.isNotEmpty;
+      final bool areTransitionsProvidedInSailorOptions =
+          this.options.defaultTransitions != null;
+
+      if (areTransitionsProvidedInNavigate) {
         transitions.addAll(argsWrapper.transitions);
-      } else if (route.defaultTransitions != null &&
-          route.defaultTransitions.isNotEmpty) {
+      } else if (areTransitionsProvidedInRouteDeclaration) {
         transitions.addAll(route.defaultTransitions);
-      } else if (this.options.defaultTransitions != null) {
+      } else if (areTransitionsProvidedInSailorOptions) {
         transitions.addAll(this.options.defaultTransitions);
       }
 
@@ -457,6 +469,25 @@ class Sailor {
       final transitionCurve = argsWrapper.transitionCurve ??
           route.defaultTransitionCurve ??
           this.options.defaultTransitionCurve;
+
+      final customTransition = argsWrapper.customTransition ??
+          route.customTransition ??
+          this.options.customTransition;
+
+      bool shouldUseCustomTransition = customTransition != null;
+      if (argsWrapper.customTransition != null) {
+        shouldUseCustomTransition = true;
+      } else if (areTransitionsProvidedInNavigate) {
+        shouldUseCustomTransition = false;
+      } else if (route.customTransition != null) {
+        shouldUseCustomTransition = true;
+      } else if (areTransitionsProvidedInRouteDeclaration) {
+        shouldUseCustomTransition = false;
+      } else if (this.options.customTransition != null) {
+        shouldUseCustomTransition = true;
+      } else if (areTransitionsProvidedInSailorOptions) {
+        shouldUseCustomTransition = false;
+      }
 
       RouteSettings routeSettings = RouteSettings(
         name: settings.name,
@@ -471,6 +502,7 @@ class Sailor {
         duration: transitionDuration,
         curve: transitionCurve,
         settings: routeSettings,
+        customTransition: shouldUseCustomTransition ? customTransition : null,
         builder: (context) => route.builder(
           context,
           baseArgs ?? route.defaultArgs,

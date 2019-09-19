@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sailor/sailor.dart';
 import 'package:sailor/src/transitions/base_transition_page_route.dart';
 import 'package:sailor/src/transitions/concrete_transition_component.dart';
 import 'package:sailor/src/transitions/decorators/fade_in_transition_decorator.dart';
@@ -17,6 +18,7 @@ class TransitionFactory {
     Duration duration,
     Curve curve,
     List<SailorTransition> transitions,
+    CustomSailorTransition customTransition,
   }) {
     TransitionComponent transitionComponent = ConcreteTransitionComponent();
 
@@ -56,6 +58,7 @@ class TransitionFactory {
       duration: duration,
       curve: curve,
       useDefaultPageTransition: transitions == null || transitions.isEmpty,
+      customTransition: customTransition,
     );
   }
 }

@@ -41,7 +41,7 @@ class Home extends StatelessWidget {
                   transitions: [
                     SailorTransition.slide_from_top,
                   ],
-                  customTransition: BounceTranistion(),
+                  customTransition: MyCustomTransition(),
                   params: {
                     'id': 123,
                   },
@@ -238,7 +238,7 @@ class Routes {
     options: SailorOptions(
       handleNameNotFoundUI: true,
       isLoggingEnabled: true,
-      customTransition: BounceTranistion(),
+      customTransition: MyCustomTransition(),
       defaultTransitions: [
         SailorTransition.slide_from_bottom,
         SailorTransition.zoom_in,
@@ -254,7 +254,7 @@ class Routes {
         name: "/secondPage",
         builder: (context, args, params) => SecondPage(),
         defaultArgs: SecondPageArgs('From default arguments!'),
-        customTransition: BounceTranistion(),
+        customTransition: MyCustomTransition(),
         params: [
           SailorParam(
             name: 'id',
@@ -279,7 +279,7 @@ class Routes {
   }
 }
 
-class BounceTranistion extends CustomSailorTransition {
+class MyCustomTransition extends CustomSailorTransition {
   @override
   Widget buildTransition(
     BuildContext context,
@@ -287,6 +287,9 @@ class BounceTranistion extends CustomSailorTransition {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    return child;
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
   }
 }
