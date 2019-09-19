@@ -1,4 +1,5 @@
 import 'package:flutter/animation.dart';
+import 'package:sailor/src/transitions/custom_sailor_transition.dart';
 import 'package:sailor/src/transitions/sailor_transition.dart';
 
 /// Options to configure a Sailor instance.
@@ -31,12 +32,19 @@ class SailorOptions {
   /// provided when routing using Sailor's navigate method.
   final Curve defaultTransitionCurve;
 
+  /// Provide a custom transition to sailor instead of using
+  /// inbuilt transitions, if not provided, sailor will revert
+  /// to use its default transitions or delegate to system's own
+  /// transitions.
+  final CustomSailorTransition customTransition;
+
   const SailorOptions({
     this.handleNameNotFoundUI = false,
     this.isLoggingEnabled = false,
     this.defaultTransitions,
     this.defaultTransitionDuration,
     this.defaultTransitionCurve,
+    this.customTransition,
   })  : assert(handleNameNotFoundUI != null),
         assert(isLoggingEnabled != null);
 }

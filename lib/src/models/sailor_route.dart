@@ -1,3 +1,4 @@
+import 'package:sailor/sailor.dart';
 import 'package:sailor/src/models/base_arguments.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
@@ -20,6 +21,12 @@ class SailorRoute {
   final Curve defaultTransitionCurve;
   final List<SailorParam> params;
 
+  /// Provide a custom transition to sailor instead of using
+  /// inbuilt transitions, if not provided, sailor will revert
+  /// to use its default transitions or delegate to systems own
+  /// transitions.
+  final CustomSailorTransition customTransition;
+
   const SailorRoute({
     @required this.name,
     @required this.builder,
@@ -28,6 +35,7 @@ class SailorRoute {
     this.defaultTransitionDuration,
     this.defaultTransitionCurve,
     this.params,
+    this.customTransition,
   })  : assert(name != null),
         assert(builder != null);
 }
