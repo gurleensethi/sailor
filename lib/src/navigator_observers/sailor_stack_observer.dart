@@ -50,37 +50,21 @@ class SailorStackObserver extends NavigatorObserver {
     final stack =
         this._routeStack.reversed.map((route) => route.settings.name).toList();
     return UnmodifiableListView(stack);
-    UnmodifiableListView<Route> getRouteStack() {
-      final stack = this._routeStack.reversed.toList();
-      return UnmodifiableListView(stack);
+  }
+
+  void prettyPrintStack() {
+    if (!AppLogger.instance.isLoggerEnabled) {
+      print("`AppLogger` should be enabled to print any Sailor logs.");
     }
 
-    /// Returns the list of route names represented as a stack of routes currently
-    /// push by Navigator.
-    ///
-    /// Head and tail of list are bottom and top of stack respectively.
-    UnmodifiableListView<String> getRouteNameStack() {
-      return this
-          ._routeStack
-          .reversed
-          .map((route) => route.settings.name)
-          .toList();
-    }
+    if (this._routeStack.isEmpty) {
+      AppLogger.instance.info("Navigation stack is empty!");
+    } else {
+      String printableStack = _routeStack.fold("", (prevValue, route) {
+        return "$prevValue ${route.isFirst ? "" : "--->"} ${route.settings.name}";
+      });
 
-    void prettyPrintStack() {
-      if (!AppLogger.instance.isLoggerEnabled) {
-        print("`AppLogger` should be enabled to print any Sailor logs.");
-      }
-
-      if (this._routeStack.isEmpty) {
-        AppLogger.instance.info("Navigation stack is empty!");
-      } else {
-        String printableStack = _routeStack.fold("", (prevValue, route) {
-          return "$prevValue ${route.isFirst ? "" : "--->"} ${route.settings.name}";
-        });
-
-        AppLogger.instance.info("Navigation Stack: " + printableStack);
-      }
+      AppLogger.instance.info("Navigation Stack: " + printableStack);
     }
   }
 }
