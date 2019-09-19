@@ -9,6 +9,7 @@ import 'package:sailor/src/models/sailor_options.dart';
 import 'package:sailor/src/models/sailor_param.dart';
 import 'package:sailor/src/models/sailor_route.dart';
 import 'package:sailor/src/navigator_observers/sailor_stack_observer.dart';
+import 'package:sailor/src/transitions/custom_sailor_transition.dart';
 import 'package:sailor/src/transitions/sailor_transition.dart';
 import 'package:sailor/src/transitions/transition_factory.dart';
 import 'package:sailor/src/ui/page_not_found.dart';
@@ -198,6 +199,10 @@ class Sailor {
   /// used for these transitions.
   ///
   /// [params] are key pair values that can be passed when navigating to a route.
+  ///
+  /// Provide a custom transition with [customTransition] to sailor instead of using
+  /// inbuilt transitions, if not provided, sailor will revert to use its default
+  /// transitions or delegate to systems own transitions.
   Future<T> navigate<T>(
     String name, {
     BaseArguments args,
@@ -208,6 +213,7 @@ class Sailor {
     Duration transitionDuration,
     Curve transitionCurve,
     Map<String, dynamic> params,
+    CustomSailorTransition customTransition,
   }) {
     assert(name != null);
     assert(navigationType != null);

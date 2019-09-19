@@ -36,12 +36,16 @@ class Home extends StatelessWidget {
             RaisedButton(
               child: Text('Open Second Page'),
               onPressed: () async {
-                final response = await Routes.sailor
-                    .navigate<bool>("/secondPage", transitions: [
-                  SailorTransition.slide_from_top,
-                ], params: {
-                  'id': 123,
-                });
+                final response = await Routes.sailor.navigate<bool>(
+                  "/secondPage",
+                  transitions: [
+                    SailorTransition.slide_from_top,
+                  ],
+                  customTransition: BounceTranistion(),
+                  params: {
+                    'id': 123,
+                  },
+                );
 
                 print("Response from SecondPage: $response");
               },
@@ -234,6 +238,7 @@ class Routes {
     options: SailorOptions(
       handleNameNotFoundUI: true,
       isLoggingEnabled: true,
+      customTransition: BounceTranistion(),
       defaultTransitions: [
         SailorTransition.slide_from_bottom,
         SailorTransition.zoom_in,
@@ -249,6 +254,7 @@ class Routes {
         name: "/secondPage",
         builder: (context, args, params) => SecondPage(),
         defaultArgs: SecondPageArgs('From default arguments!'),
+        customTransition: BounceTranistion(),
         params: [
           SailorParam(
             name: 'id',
@@ -270,5 +276,17 @@ class Routes {
         builder: (context, args, params) => PushReplacePage(),
       ),
     ]);
+  }
+}
+
+class BounceTranistion extends CustomSailorTransition {
+  @override
+  Widget buildTransition(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return child;
   }
 }

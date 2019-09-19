@@ -8,3 +8,4 @@ export 'package:sailor/src/navigator_observers/sailor_logging_observer.dart';
 export 'package:sailor/src/models/sailor_options.dart';
 export 'package:sailor/src/models/route_args_pair.dart';
 export 'package:sailor/src/transitions/sailor_transition.dart';
+export 'package:sailor/src/transitions/custom_sailor_transition.dart';
