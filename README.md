@@ -8,18 +8,14 @@ A Flutter package for easy navigation management.
 
 #### Warning: Package is still under development, there might be breaking changes in future.
 
-## Roadmap
-- [x] Core Navigation Features.
-- [x] Proper logging when navigating.
-- [x] Basic Transitions and configuration.
-- [ ] More inbuilt transitions.
-- [ ] Pretty printing navigation stack.
-
 ## Index
 - [Setup and Usage](#setup-and-usage)
+- [Passing Parameters](#passing-parameters)
 - [Passing Arguments](#passing-arguments)
 - [Transitions](#transitions)
 - [Pushing Multiple Routes](#pushing-multiple-routes)
+- [Log Navigation](#log-navigation)
+- [Support](#support)
 
 ## Setup and Usage
 
@@ -78,7 +74,7 @@ Routes.sailor.navigate("/secondPage");
 Routes.sailor("/secondPage");
 ```
 
-## Passing parameters
+## Passing Parameters
 `Sailor` allows you to pass parameters to the page that you are navigating to.
 
 - Before passing the parameter itself, you need to declare it while declaring your route. Let's declare a parameter named `id` that has a default value of `1234`.
@@ -270,9 +266,9 @@ Priority: Transitions provided while adding a route or when navigating using `na
 
 ### Custom Transitions
 
-Although `sailor` provides you a number of out of the box transitions, you can still provide your own custom transitions.
+Although `sailor` provides you with a number of out of the box transitions, you can still provide your own custom transitions.
 
-- To create a custom transitions, extend the class `CustomSailorTransition` and implement `buildTransition` method.
+- To create a custom transition, extend the class `CustomSailorTransition` and implement `buildTransition` method.
 
 ```dart
 class MyCustomTransition extends CustomSailorTransition {
