@@ -268,6 +268,78 @@ SailorOptions(
 
 Priority: Transitions provided while adding a route or when navigating using `navigate`, will override these transitions.
 
+### Custom Transitions
+
+Although `sailor` provides you a number of out of the box transitions, you can still provide your own custom transitions.
+
+- To create a custom transitions, extend the class `CustomSailorTransition` and implement `buildTransition` method.
+
+```dart
+class MyCustomTransition extends CustomSailorTransition {
+  @override
+  Widget buildTransition(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  }
+}
+```
+
+This transition can now be provided at 3 places: 
+
+- While calling `navigate`.
+
+```dart
+Routes.sailor.navigate<bool>(
+  "/secondPage",
+  customTransition: MyCustomTransition(),
+);
+```
+
+- When declaring a `SailorRoute`.
+
+```dart
+SailorRoute(
+  name: "/secondPage",
+  builder: (context, args, params) => SecondPage(),
+  customTransition: MyCustomTransition(),    
+),
+```
+
+- In `SailorOptions`:
+
+```dart
+static final sailor = Sailor(
+  options: SailorOptions(
+    customTransition: MyCustomTransition(),
+  ),
+);
+```
+
+#### Custom Transition Priority
+
+*NOTE: Custom transitions have the highest priority, if you provide a custom transition, they will be used over Sailor's inbuilt transitions.*
+
+The same priority rules apply to custom transitions as inbuilt sailor transitions, with the added rule that at any step if both transitions are provided (i.e. Sailor's inbuilt transitions and a CustomSailorTransition), the custom transition will be used over inbuilt one.
+
+For example, in the below code, `MyCustomTransition` will be used instead of `SailorTransition.slide_from_top`.
+ 
+```dart
+Routes.sailor.navigate<bool>(
+  "/secondPage",
+  transitions: [
+    SailorTransition.slide_from_top,
+  ],
+  customTransition: MyCustomTransition(),
+);
+```
+
 ## Pushing Multiple Routes
 
 Sailor allows you to push multiple pages at the same time and get collected response from all.
