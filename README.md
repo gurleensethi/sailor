@@ -46,8 +46,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Sailor Example',
       home: Home(),
-      navigatorKey: Routes.sailor.navigatorKey,
-      onGenerateRoute: Routes.sailor.generator(),
+      navigatorKey: Routes.sailor.navigatorKey,  // important
+      onGenerateRoute: Routes.sailor.generator(),  // important
     );
   }
 }
@@ -161,7 +161,7 @@ final response = Routes.sailor.navigate(
 );
 ```
 
-* When in the SecondPage, use `Sailor.arguments` to get the passed arguments.
+* When in the SecondPage, use `Sailor.args` to get the passed arguments.
 
 ```dart
 class SecondPage extends StatelessWidget {
