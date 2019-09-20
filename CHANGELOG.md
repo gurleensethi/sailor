@@ -1,3 +1,7 @@
+## [0.5.0] - 20 September 2019
+
+* Add support for providing your own custom transitions.
+
 ## [0.4.0] - 3 September 2019
 
 * Add support for passing parameters when navigating route.
