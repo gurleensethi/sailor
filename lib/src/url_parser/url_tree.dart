@@ -3,7 +3,7 @@ import 'dart:collection';
 abstract class _TreeNode<T> {
   final String urlPart;
   T value;
-  final Map<String, _TreeNode> children = {};
+  final Map<String, _TreeNode<T>> children = {};
 
   _TreeNode(this.urlPart, this.value) : assert(urlPart != null);
 
@@ -32,7 +32,7 @@ class _ParameterTreeNode<T> extends _TreeNode<T> {
 }
 
 class UrlTree<T> {
-  final _TreeNode root;
+  final _TreeNode<T> root;
 
   UrlTree(T homeRoute) : root = _FixedStringTreeNode<T>('/', homeRoute);
 
@@ -92,5 +92,43 @@ class UrlTree<T> {
       cleanedUrl = cleanedUrl.substring(0, cleanedUrl.length - 1);
     }
     return cleanedUrl;
+  }
+
+  T find(String url) {
+    final String cleanedUrl = _cleanUrl(url);
+    final node = _find(this.root, cleanedUrl.split("/"));
+    return node != null ? node.value : null;
+  }
+
+  _TreeNode _find(_TreeNode node, List<String> parts) {
+    if (node == null || parts.isEmpty) {
+      return null;
+    }
+    final String part = parts[0];
+    final bool isLastPart = parts.length == 1;
+    if (isLastPart && node.children.isEmpty) {
+      return null;
+    }
+    final _TreeNode exactMatchNode = node.children[part];
+    if (exactMatchNode != null) {
+      if (isLastPart) {
+        return exactMatchNode;
+      }
+      return _find(exactMatchNode, parts.sublist(1));
+    } else {
+      // Look for a parameter node
+      for (_TreeNode<T> childNode in node.children.values) {
+        if (childNode is _ParameterTreeNode<T>) {
+          if (isLastPart) {
+            return childNode;
+          }
+          final _TreeNode<T> resultNode = _find(childNode, parts.sublist(1));
+          if (resultNode != null) {
+            return resultNode;
+          }
+        }
+      }
+    }
+    return null;
   }
 }
