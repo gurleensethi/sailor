@@ -32,4 +32,12 @@ void main() {
     expect(_tree.root.children['abc'].children.containsKey('1'), isTrue);
     expect(_tree.root.children['def'].children.containsKey('2'), isTrue);
   });
+
+  test('stores parameter url', () {
+    final String url = "/user/:id";
+    _tree.addUrl(url, '123');
+    _tree.printBFS();
+    expect(_tree.root.children.containsKey('user'), isTrue);
+    expect(_tree.root.children['user'].children['id'].value, equals("123"));
+  });
 }
