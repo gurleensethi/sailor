@@ -330,7 +330,7 @@ class Sailor {
       customTransition: customTransition,
     );
 
-    // Evaluate if the route can be opend using route guard
+    // Evaluate if the route can be opend using route guard.
     final route = _routeNameMappings[name];
     if (route != null && route.routeGuard != null) {
       final bool canOpen = await route.routeGuard(

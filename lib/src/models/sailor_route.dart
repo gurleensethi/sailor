@@ -26,6 +26,10 @@ class SailorRoute {
   final Duration defaultTransitionDuration;
   final Curve defaultTransitionCurve;
   final List<SailorParam> params;
+
+  /// Ran before opening the route itself.
+  /// If [false] is returned, the route is reject and is not opened.
+  /// Anything else will result in opening the route.
   final RouteGuard routeGuard;
 
   /// Provide a custom transition to sailor instead of using
