@@ -286,10 +286,21 @@ class Sailor {
     Map<String, dynamic> params,
     CustomSailorTransition customTransition,
   ) {
-    // Check if all the required parameters are provided
     final routeParams = _routeParamsMappings[name];
     if (routeParams != null) {
       routeParams.forEach((key, value) {
+        // Type of paramter passed should be the same
+        // when type is declared.
+        if (params.containsKey(value.name)) {
+          final passedParamType = params[value.name].runtimeType;
+          if (passedParamType != value.paramType) {
+            AppLogger.instance.warning("Invalid Parameter Type! "
+                "'${value.name}' is declared with a type '${value.paramType}', "
+                "but a '$passedParamType' was passed!");
+          }
+        }
+
+        // All paramters that are 'required' should be passed.
         bool isMissingRequiredParam = value.isRequired &&
             (params == null || !params.containsKey(value.name));
 
