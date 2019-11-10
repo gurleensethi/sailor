@@ -346,30 +346,24 @@ class Sailor {
 
     switch (navigationType) {
       case NavigationType.push:
-        {
-          return this
-              .navigatorKey
-              .currentState
-              .pushNamed(name, arguments: argsWrapper);
-        }
+        return this
+            .navigatorKey
+            .currentState
+            .pushNamed(name, arguments: argsWrapper);
       case NavigationType.pushReplace:
-        {
-          return this.navigatorKey.currentState.pushReplacementNamed(name,
-              result: result, arguments: argsWrapper);
-        }
+        return this
+            .navigatorKey
+            .currentState
+            .pushReplacementNamed(name, result: result, arguments: argsWrapper);
       case NavigationType.pushAndRemoveUntil:
-        {
-          return this.navigatorKey.currentState.pushNamedAndRemoveUntil(
-              name, removeUntilPredicate,
-              arguments: argsWrapper);
-        }
+        return this.navigatorKey.currentState.pushNamedAndRemoveUntil(
+            name, removeUntilPredicate,
+            arguments: argsWrapper);
       case NavigationType.popAndPushNamed:
-        {
-          return this
-              .navigatorKey
-              .currentState
-              .popAndPushNamed(name, result: result, arguments: argsWrapper);
-        }
+        return this
+            .navigatorKey
+            .currentState
+            .popAndPushNamed(name, result: result, arguments: argsWrapper);
     }
 
     return null;
