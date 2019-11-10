@@ -249,33 +249,39 @@ class Routes {
   );
 
   static void createRoutes() {
-    sailor.addRoutes([
-      SailorRoute(
-        name: "/secondPage",
-        builder: (context, args, params) => SecondPage(),
-        defaultArgs: SecondPageArgs('From default arguments!'),
-        customTransition: MyCustomTransition(),
-        params: [
-          SailorParam<int>(
-            name: 'id',
-            defaultValue: 1234,
-          ),
-        ],
-        defaultTransitions: [
-          SailorTransition.slide_from_bottom,
-          SailorTransition.zoom_in,
-        ],
-      ),
-      SailorRoute(
-        name: "/thirdPage",
-        builder: (context, args, params) => ThirdPage(),
-        defaultTransitions: [SailorTransition.slide_from_left],
-      ),
-      SailorRoute(
-        name: "/pushReplacePage",
-        builder: (context, args, params) => PushReplacePage(),
-      ),
-    ]);
+    sailor.addRoutes(
+      [
+        SailorRoute(
+          name: "/secondPage",
+          builder: (context, args, params) => SecondPage(),
+          defaultArgs: SecondPageArgs('From default arguments!'),
+          customTransition: MyCustomTransition(),
+          params: [
+            SailorParam<int>(
+              name: 'id',
+              defaultValue: 1234,
+            ),
+          ],
+          defaultTransitions: [
+            SailorTransition.slide_from_bottom,
+            SailorTransition.zoom_in,
+          ],
+          routeGuard: (context, args, params) async {
+            return false;
+          },
+        ),
+        SailorRoute(
+          name: "/thirdPage",
+          builder: (context, args, params) => ThirdPage(),
+          defaultTransitions: [SailorTransition.slide_from_left],
+        ),
+        SailorRoute(
+          name: "/pushReplacePage",
+          builder: (context, args, params) => PushReplacePage(),
+          routeGuard: (context, args, params) => Future.value(true),
+        ),
+      ],
+    );
   }
 }
 

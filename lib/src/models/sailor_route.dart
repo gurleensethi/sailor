@@ -12,6 +12,12 @@ typedef SailorRouteBuilder = Widget Function(
   ParamMap paramMap,
 );
 
+typedef RouteGuard = Future<bool> Function(
+  BuildContext context,
+  BaseArguments args,
+  ParamMap paramMap,
+);
+
 class SailorRoute {
   final String name;
   final SailorRouteBuilder builder;
@@ -20,6 +26,7 @@ class SailorRoute {
   final Duration defaultTransitionDuration;
   final Curve defaultTransitionCurve;
   final List<SailorParam> params;
+  final RouteGuard routeGuard;
 
   /// Provide a custom transition to sailor instead of using
   /// inbuilt transitions, if not provided, sailor will revert
@@ -36,6 +43,7 @@ class SailorRoute {
     this.defaultTransitionCurve,
     this.params,
     this.customTransition,
+    this.routeGuard,
   })  : assert(name != null),
         assert(builder != null);
 }
