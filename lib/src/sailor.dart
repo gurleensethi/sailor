@@ -144,6 +144,13 @@ class Sailor {
     Map<String, dynamic> params,
     CustomSailorTransition customTransition,
   }) {
+    assert(name != null);
+    assert(navigationType != null);
+    assert(navigationType != NavigationType.pushAndRemoveUntil ||
+        removeUntilPredicate != null);
+
+    _checkAndThrowRouteNotFound(name, args, navigationType);
+
     return navigate<T>(
       name,
       navigationType: navigationType,
@@ -285,7 +292,7 @@ class Sailor {
     Curve transitionCurve,
     Map<String, dynamic> params,
     CustomSailorTransition customTransition,
-  ) {
+  ) async {
     final routeParams = _routeParamsMappings[name];
     if (routeParams != null) {
       routeParams.forEach((key, value) {
@@ -322,6 +329,20 @@ class Sailor {
       routeParams: _routeParamsMappings[name],
       customTransition: customTransition,
     );
+
+    // Evaluate if the route can be opend using route guard
+    final route = _routeNameMappings[name];
+    if (route != null && route.routeGuard != null) {
+      final bool canOpen = await route.routeGuard(
+        navigatorKey.currentContext,
+        argsWrapper.baseArguments,
+        ParamMap(name, routeParams, params),
+      );
+      if (canOpen == false) {
+        AppLogger.instance.warning("'$name' route rejected by route guard!");
+        return null;
+      }
+    }
 
     switch (navigationType) {
       case NavigationType.push:
