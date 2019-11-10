@@ -256,7 +256,7 @@ class Routes {
         defaultArgs: SecondPageArgs('From default arguments!'),
         customTransition: MyCustomTransition(),
         params: [
-          SailorParam(
+          SailorParam<int>(
             name: 'id',
             defaultValue: 1234,
           ),
