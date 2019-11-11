@@ -338,7 +338,7 @@ class Sailor {
         argsWrapper.baseArguments,
         ParamMap(name, routeParams, params),
       );
-      if (canOpen == false) {
+      if (canOpen != true) {
         AppLogger.instance.warning("'$name' route rejected by route guard!");
         return null;
       }
