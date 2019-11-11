@@ -28,8 +28,8 @@ class SailorRoute {
   final List<SailorParam> params;
 
   /// Ran before opening the route itself.
-  /// If [false] is returned, the route is reject and is not opened.
-  /// Anything else will result in opening the route.
+  /// If [true] is returned, the route is approvied and opened.
+  /// Anything else will result in the route being rejected and not open.
   final RouteGuard routeGuard;
 
   /// Provide a custom transition to sailor instead of using
