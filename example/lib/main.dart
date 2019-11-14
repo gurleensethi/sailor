@@ -43,7 +43,7 @@ class Home extends StatelessWidget {
                   ],
                   customTransition: MyCustomTransition(),
                   params: {
-                    'id': 123,
+                    'id': null,
                   },
                 );
 
@@ -257,18 +257,19 @@ class Routes {
           defaultArgs: SecondPageArgs('From default arguments!'),
           customTransition: MyCustomTransition(),
           params: [
-            SailorParam<int>(
+            SailorParam<String>(
               name: 'id',
-              defaultValue: 1234,
             ),
           ],
           defaultTransitions: [
             SailorTransition.slide_from_bottom,
             SailorTransition.zoom_in,
           ],
-          routeGuard: (context, args, params) async {
-            return false;
-          },
+          routeGuards: [
+            SailorRouteGuard.simple((context, args, params) async {
+              return true;
+            }),
+          ],
         ),
         SailorRoute(
           name: "/thirdPage",
@@ -278,7 +279,11 @@ class Routes {
         SailorRoute(
           name: "/pushReplacePage",
           builder: (context, args, params) => PushReplacePage(),
-          routeGuard: (context, args, params) => Future.value(true),
+          routeGuards: [
+            SailorRouteGuard.simple(
+              (context, args, params) => Future.value(true),
+            )
+          ],
         ),
       ],
     );
