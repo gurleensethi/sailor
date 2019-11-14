@@ -8,6 +8,7 @@ import 'package:sailor/src/models/base_arguments.dart';
 import 'package:sailor/src/models/sailor_options.dart';
 import 'package:sailor/src/models/sailor_param.dart';
 import 'package:sailor/src/models/sailor_route.dart';
+import 'package:sailor/src/models/sailor_route_guard.dart';
 import 'package:sailor/src/navigator_observers/sailor_stack_observer.dart';
 import 'package:sailor/src/transitions/custom_sailor_transition.dart';
 import 'package:sailor/src/transitions/sailor_transition.dart';
@@ -83,6 +84,20 @@ class Sailor {
         paramKey: key,
         routeName: routeSettings.name,
       );
+    }
+
+    // Check for request paramter type with registered paramter type.
+    final paramRegisterdType = argumentsWrapper
+        .routeParams[key].paramType; // Type with which param was registed
+    if (T != paramRegisterdType) {
+      AppLogger.instance
+        ..warning("========================================")
+        ..warning("Mismatching Paramter Type!")
+        ..warning(
+            "Requested param '$key' with type '$T', but was declared with type '$paramRegisterdType'.\n")
+        ..warning(
+            "Make sure to pass the type of variable which used when declaring the 'SailorParam<T>'.")
+        ..warning("========================================");
     }
 
     final defaultParamValue = argumentsWrapper.routeParams[key].defaultValue;
@@ -298,7 +313,7 @@ class Sailor {
       routeParams.forEach((key, value) {
         // Type of paramter passed should be the same
         // when type is declared.
-        if (params.containsKey(value.name)) {
+        if (params.containsKey(value.name) && params[value.name] != null) {
           final passedParamType = params[value.name].runtimeType;
           if (passedParamType != value.paramType) {
             AppLogger.instance.warning("Invalid Parameter Type! "
@@ -332,12 +347,22 @@ class Sailor {
 
     // Evaluate if the route can be opend using route guard.
     final route = _routeNameMappings[name];
-    if (route != null && route.routeGuard != null) {
-      final bool canOpen = await route.routeGuard(
-        navigatorKey.currentContext,
-        argsWrapper.baseArguments,
-        ParamMap(name, routeParams, params),
-      );
+
+    if (route != null &&
+        route.routeGuards != null &&
+        route.routeGuards.isNotEmpty) {
+      bool canOpen = true;
+      for (SailorRouteGuard routeGuard in route.routeGuards) {
+        final result = await routeGuard.canOpen(
+          navigatorKey.currentContext,
+          argsWrapper.baseArguments,
+          ParamMap(name, routeParams, params),
+        );
+        if (result != true) {
+          canOpen = false;
+          break;
+        }
+      }
       if (canOpen != true) {
         AppLogger.instance.warning("'$name' route rejected by route guard!");
         return null;
