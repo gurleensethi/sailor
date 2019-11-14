@@ -269,9 +269,7 @@ class Routes {
             SailorRouteGuard.simple((context, args, params) async {
               return true;
             }),
-            SailorRouteGuard.simple((context, args, params) async {
-              return false;
-            }),
+            CustomRouteGuard(),
           ],
         ),
         SailorRoute(
@@ -305,5 +303,16 @@ class MyCustomTransition extends CustomSailorTransition {
       opacity: animation,
       child: child,
     );
+  }
+}
+
+class CustomRouteGuard extends SailorRouteGuard {
+  @override
+  Future<bool> canOpen(
+    BuildContext context,
+    BaseArguments args,
+    ParamMap paramMap,
+  ) async {
+    return false;
   }
 }
