@@ -14,7 +14,7 @@ A Flutter package for easy navigation management.
 - [Setup and Usage](#setup-and-usage)
 - [Passing Parameters](#passing-parameters)
 - [Passing Arguments](#passing-arguments)
-- [Route Guard (Experimental)](#route-guard-experimental)
+- [Route Guards (Experimental)](#route-guards-experimental)
 - [Transitions](#transitions)
 - [Pushing Multiple Routes](#pushing-multiple-routes)
 - [Log Navigation](#log-navigation)
@@ -89,7 +89,7 @@ sailor.addRoutes([
     name: "/secondPage",
     builder: (context, args, params) => SecondPage(),
     params: [
-      SailorParam(
+      SailorParam<int>(
         name: 'id',
         defaultValue: 1234,
       ),
@@ -143,6 +143,8 @@ class SecondPage extends StatelessWidget {
 }
 ```
 
+Make sure to specify the type of paramter when declaring `SailorParam<T>`. This type is used to make sure when the route is being opened, it is passed the correct param type. Right now `Sailor` logs a warning if the type of declared and passed param is not same. In future version this might throw an error.
+
 ## Passing Arguments
 
 `Sailor` allows you to pass arguments to the page that you are navigating to.
@@ -186,7 +188,7 @@ class SecondPage extends StatelessWidget {
 }
 ```
 
-## Route Guard (Experimental)
+## Route Guards (Experimental)
 
 Routes can be protected from being opened when `navigate` is called using `route guard`.
 
@@ -197,18 +199,48 @@ sailor.addRoutes([
   SailorRoute(
     name: "/secondPage",
     builder: (context, args, params) => SecondPage(),
-    routeGuard: (context, args, params) async {
-      // Can open logic goes here.
-      if (sharedPreferences.getToken() != null) {
-        return true;
-      }
-      return false;
-    },
+    routeGuards: [
+      SailorRouteGuard.simple((context, args, params) async {
+        // Can open logic goes here.
+        if (sharedPreferences.getToken() != null) {
+          return true;
+        }
+        return false;
+      }),
+    ],
   ),
 );
 ```
 
-`routeGuard` takes a function which should return a `Future<bool>`. If the value returned is `true` the route is accepted and opened, anything else will result in route being rejected and not being opened.
+`routeGuards` takes an array of `SailorRouteGuard`.
+
+There are two ways to create a route guard:
+
+- Using `SailorRouteGuard.simple`, as shown above.
+```dart
+SailorRouteGuard.simple((context, args, params) async {
+  // Can open logic goes here.
+  if (sharedPreferences.getToken() != null) {
+    return true;
+  }
+  return false;
+});
+```
+- Extending `SailorRouteGuard` class.
+```dart
+class CustomRouteGuard extends SailorRouteGuard {
+  @override
+  Future<bool> canOpen(
+    BuildContext context,
+    BaseArguments args,
+    ParamMap paramMap,
+  ) async {
+    return false;
+  }
+}
+```
+
+The result from each rotue guard is `Future<bool>`. If the value returned __by each route__ is `true` the route is accepted and opened, anything else will result in route being rejected and not being opened.
 
 ## Transitions
 

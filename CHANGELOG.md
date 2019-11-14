@@ -2,6 +2,7 @@
 
 - Route Guards: Prevent routes from being opened based on a condition.
 - More type checking for `SailorParams`: `SailorParams<T>` now accept a generic type `T`, of the type of paramter that is required to be passed. When opening a route, `runtimeType` of the passed value is compred to the `T` passed when declaring `SailorParam<T>`.
+- Provider `navigationKey`: An external `navigatorKey` can be provided to sailor using `SailorOptions`.
 
 ## [0.5.0] - 20 September 2019
 
