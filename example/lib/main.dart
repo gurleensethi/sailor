@@ -269,6 +269,9 @@ class Routes {
             SailorRouteGuard.simple((context, args, params) async {
               return true;
             }),
+            SailorRouteGuard.simple((context, args, params) async {
+              return false;
+            }),
           ],
         ),
         SailorRoute(

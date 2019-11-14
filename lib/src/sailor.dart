@@ -23,9 +23,14 @@ enum NavigationType { push, pushReplace, pushAndRemoveUntil, popAndPushNamed }
 /// you encapsulate and manage routing at one place.
 class Sailor {
   Sailor({
-    this.options = const SailorOptions(),
+    this.options = const SailorOptions(isLoggingEnabled: true),
   }) : assert(options != null) {
     AppLogger.init(isLoggerEnabled: options.isLoggingEnabled);
+    if (options != null && options.navigatorKey != null) {
+      this._navigatorKey = options.navigatorKey;
+    } else {
+      this._navigatorKey = GlobalKey<NavigatorState>();
+    }
   }
 
   /// Configuration options for [Sailor].
@@ -47,7 +52,7 @@ class Sailor {
   /// This is the same [NavigatorState] that is returned by [Navigator.of(context)]
   /// (when there is only a single [Navigator] in Widget tree, i.e. from [MaterialApp]
   /// or [CupertinoApp]).
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState> _navigatorKey;
 
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
 

@@ -1,4 +1,5 @@
 import 'package:flutter/animation.dart';
+import 'package:flutter/material.dart';
 import 'package:sailor/src/transitions/custom_sailor_transition.dart';
 import 'package:sailor/src/transitions/sailor_transition.dart';
 
@@ -38,6 +39,15 @@ class SailorOptions {
   /// transitions.
   final CustomSailorTransition customTransition;
 
+  /// A navigator key lets Sailor grab the [NavigatorState] from a [MaterialApp]
+  /// or a [CupertinoApp]. All navigation operations (push, pop, etc) are carried
+  /// out using this [NavigatorState].
+  ///
+  /// This is the same [NavigatorState] that is returned by [Navigator.of(context)]
+  /// (when there is only a single [Navigator] in Widget tree, i.e. from [MaterialApp]
+  /// or [CupertinoApp]).
+  final GlobalKey<NavigatorState> navigatorKey;
+
   const SailorOptions({
     this.handleNameNotFoundUI = false,
     this.isLoggingEnabled = false,
@@ -45,6 +55,7 @@ class SailorOptions {
     this.defaultTransitionDuration,
     this.defaultTransitionCurve,
     this.customTransition,
+    this.navigatorKey,
   })  : assert(handleNameNotFoundUI != null),
         assert(isLoggingEnabled != null);
 }
