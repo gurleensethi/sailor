@@ -95,6 +95,12 @@ class Home extends StatelessWidget {
               },
             ),
             RaisedButton(
+              child: Text('Navigate to SailorConsumerPage'),
+              onPressed: () async {
+                Routes.sailor.navigate("/sailorConsumerPage", args: ThirdPageArgs(1));
+              },
+            ),
+            RaisedButton(
               child: Text('Print navigation stack!'),
               onPressed: () {
                 Routes.sailor.navigationStackObserver.prettyPrintStack();
@@ -183,6 +189,22 @@ class ThirdPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class PageWithSailorConsumer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SailorConsumer<ThirdPageArgs>(
+      builder: (context, ThirdPageArgs arg) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Using SailorConsumer'),
+          ),
+          body: Text('Count arg: ${arg.count}'),
+        );
+      },
     );
   }
 }
@@ -286,6 +308,10 @@ class Routes {
             )
           ],
         ),
+        SailorRoute(
+          name: '/sailorConsumerPage',
+          builder: (context, args, params) => PageWithSailorConsumer(),
+        )
       ],
     );
   }

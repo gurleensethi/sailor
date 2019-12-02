@@ -16,6 +16,8 @@ import 'package:sailor/src/transitions/transition_factory.dart';
 import 'package:sailor/src/ui/page_not_found.dart';
 import 'models/route_args_pair.dart';
 
+typedef SailorConsumerBuilder<T extends BaseArguments> = Widget Function(BuildContext context, T arguments);
+
 enum NavigationType { push, pushReplace, pushAndRemoveUntil, popAndPushNamed }
 
 /// Sailor manages routing, registering routes with transitions, navigating to
@@ -567,5 +569,18 @@ class ParamMap {
     final defaultParamValue = _routeParams[key].defaultValue;
     final paramFromNavigationCall = _params != null ? _params[key] : null;
     return (paramFromNavigationCall ?? defaultParamValue) as T;
+  }
+}
+
+class SailorConsumer<T extends BaseArguments> extends StatelessWidget {
+  final SailorConsumerBuilder<T> builder;
+
+  SailorConsumer({this.builder});
+
+  @override
+  Widget build(BuildContext context) {
+    final args = Sailor.args<T>(context);
+
+    return builder(context, args);
   }
 }
