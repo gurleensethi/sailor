@@ -425,8 +425,8 @@ class Sailor {
   }
 
   /// Delegation for [Navigator.pop].
-  bool pop([dynamic result]) {
-    return this.navigatorKey.currentState.pop(result);
+  void pop([dynamic result]) {
+    this.navigatorKey.currentState.pop(result);
   }
 
   /// Delegation for [Navigator.popUntil].
