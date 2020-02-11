@@ -272,7 +272,7 @@ class Sailor {
         routeArgs.transitions,
         routeArgs.transitionDuration,
         routeArgs.transitionCurve,
-        null,
+        routeArgs.params,
         routeArgs.customTransition,
       );
 
