@@ -358,14 +358,29 @@ class Sailor {
         route.routeGuards.isNotEmpty) {
       bool canOpen = true;
       for (SailorRouteGuard routeGuard in route.routeGuards) {
-        final result = await routeGuard.canOpen(
+        final guardResult = await routeGuard.canOpen(
           navigatorKey.currentContext,
           argsWrapper.baseArguments,
           ParamMap(name, routeParams, params),
         );
-        if (result != true) {
+        if (!(guardResult is RouteArgsPair) && guardResult != true) {
           canOpen = false;
           break;
+        }
+
+        if (guardResult is RouteArgsPair) {
+          return _navigate(
+            guardResult.name,
+            guardResult.args,
+            navigationType,
+            result,
+            removeUntilPredicate,
+            guardResult.transitions,
+            guardResult.transitionDuration,
+            guardResult.transitionCurve,
+            guardResult.params,
+            guardResult.customTransition,
+          );
         }
       }
       if (canOpen != true) {
