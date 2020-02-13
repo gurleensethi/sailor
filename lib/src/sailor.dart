@@ -568,6 +568,9 @@ class ParamMap {
 
   ParamMap(this._routeName, this._routeParams, this._params);
 
+  String get routeName => "$_routeName";
+  Map<String, dynamic> get params => Map<String, dynamic>.unmodifiable(_params);
+
   T param<T>(String key) {
     final isParamNotRegistered =
         _routeParams == null || !_routeParams.containsKey(key);
