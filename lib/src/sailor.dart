@@ -425,7 +425,7 @@ class Sailor {
   }
 
   /// Delegation for [Navigator.pop].
-  bool pop([dynamic result]) {
+  void pop([dynamic result]) {
     return this.navigatorKey.currentState.pop(result);
   }
 
@@ -506,7 +506,6 @@ class Sailor {
 
       RouteSettings routeSettings = RouteSettings(
         name: settings.name,
-        isInitialRoute: settings.isInitialRoute,
         arguments: argsWrapper.copyWith(
           baseArguments: baseArgs != null ? baseArgs : route.defaultArgs,
         ),
