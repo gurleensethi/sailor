@@ -1,3 +1,8 @@
+## [0.7.0] - 7 April 2020
+
+- Fix Sailor API's to be compatible with latest Flutter API's.
+- `Breaking Change`: `Sailor.pop` returns `void` instead of `bool`.
+
 ## [0.6.0] - 14 November 2019
 
 - Route Guards: Prevent routes from being opened based on a condition.
