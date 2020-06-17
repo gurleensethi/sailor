@@ -318,7 +318,7 @@ class Sailor {
       routeParams.forEach((key, value) {
         // Type of paramter passed should be the same
         // when type is declared.
-        if (params.containsKey(value.name) && params[value.name] != null) {
+        if (params != null && params.containsKey(value.name) && params[value.name] != null) {
           final passedParamType = params[value.name].runtimeType;
           if (passedParamType != value.paramType) {
             AppLogger.instance.warning("Invalid Parameter Type! "
