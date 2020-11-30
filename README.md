@@ -444,7 +444,7 @@ flutter: [Sailor] Route Pushed: (Pushed Route='/secondPage', Previous Route='/',
 flutter: [Sailor] Route Popped: (New Route='/', Popped Route='/secondPage', New Route Args=null, Previous Route Args=Instance of 'SecondPageArgs')
 ```
 
-## Navigate and remove routes
+## Remove routes and clean navigation
 
 If you want navigate and remove other routes (for example, the login route), use the methods `navigationType` and `removeUntilPredicate`.
 For remove all routes in navigator:
@@ -452,7 +452,6 @@ For remove all routes in navigator:
 Routes.sailor.navigate<bool>(
   "/secondPage",
   navigationType: NavigationType.pushAndRemoveUntil,
-  customTransition: MyCustomTransition(),
   removeUntilPredicate: (route) {
     return false;
   },
