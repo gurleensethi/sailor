@@ -449,7 +449,7 @@ flutter: [Sailor] Route Popped: (New Route='/', Popped Route='/secondPage', New 
 If you want navigate and remove other routes (for example, the login route), use the methods `navigationType` and `removeUntilPredicate`.
 For remove all routes in navigator:
 ```
-Routes.sailor.navigate<bool>(
+Routes.sailor.navigate(
   "/secondPage",
   navigationType: NavigationType.pushAndRemoveUntil,
   removeUntilPredicate: (route) {
