@@ -240,7 +240,7 @@ class CustomRouteGuard extends SailorRouteGuard {
 }
 ```
 
-The result from each rotue guard is `Future<bool>`. If the value returned __by each route__ is `true` the route is accepted and opened, anything else will result in route being rejected and not being opened.
+The result from each route guard is `Future<bool>`. If the value returned __by each route__ is `true` the route is accepted and opened, anything else will result in route being rejected and not being opened.
 
 ## Transitions
 
