@@ -1,11 +1,11 @@
 name: sailor
 description: Easily manage page navigation/routing in Flutter apps. Add page transition animations, log navigation events.
 version: 0.7.1
-author: Gurleen Sethi <contactgurleensethi@gmail.com>
+# author: Gurleen Sethi <contactgurleensethi@gmail.com>
 homepage: https://www.github.com/gurleensethi/sailor
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:

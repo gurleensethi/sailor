@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 abstract class _TreeNode<T> {
-  final String urlPart;
+  final String? urlPart;
   T value;
   final Map<String, _TreeNode<T>> children = {};
 
@@ -36,36 +36,36 @@ class UrlTree<T> {
 
   UrlTree(T homeRoute) : root = _FixedStringTreeNode<T>('/', homeRoute);
 
-  void addUrl(String url, T value) {
+  void addUrl(String? url, T value) {
     assert(url != null, "url cannot be null");
     assert(url != '/', "home route has already been registerd");
-    assert(url.isNotEmpty, "url cannot be empty");
-    final String cleanedUrl = _cleanUrl(url);
+    assert(url!.isNotEmpty, "url cannot be empty");
+    final String cleanedUrl = _cleanUrl(url!);
     _addTreeNode(cleanedUrl, value);
   }
 
   void _addTreeNode(String url, T value) {
     final List<String> parts = url.split('/');
-    _TreeNode temp = this.root;
+    _TreeNode? temp = this.root;
 
     for (int i = 0; i < parts.length; i++) {
       final String part = parts[i];
       final bool isParamNode = part.startsWith(":");
       final String urlPart = isParamNode ? part.substring(1) : part;
-      final bool hasChild = temp.children.containsKey(urlPart);
+      final bool hasChild = temp!.children.containsKey(urlPart);
       final bool isLastPart = i == (parts.length - 1);
       if (hasChild) {
         temp = temp.children[urlPart];
       } else {
         final _TreeNode node = isParamNode
-            ? _ParameterTreeNode<T>(urlPart, null)
-            : _FixedStringTreeNode<T>(urlPart, null);
+            ? _ParameterTreeNode<T?>(urlPart, null)
+            : _FixedStringTreeNode<T?>(urlPart, null);
         temp.children[urlPart] = node;
         temp = node;
       }
 
       if (isLastPart) {
-        temp.value = value;
+        temp!.value = value;
       }
     }
   }
@@ -94,13 +94,13 @@ class UrlTree<T> {
     return cleanedUrl;
   }
 
-  T find(String url) {
+  T? find(String url) {
     final String cleanedUrl = _cleanUrl(url);
     final node = _find(this.root, cleanedUrl.split("/"));
     return node != null ? node.value : null;
   }
 
-  _TreeNode _find(_TreeNode node, List<String> parts) {
+  _TreeNode? _find(_TreeNode? node, List<String> parts) {
     if (node == null || parts.isEmpty) {
       return null;
     }
@@ -109,7 +109,7 @@ class UrlTree<T> {
     if (isLastPart && node.children.isEmpty) {
       return null;
     }
-    final _TreeNode exactMatchNode = node.children[part];
+    final _TreeNode? exactMatchNode = node.children[part];
     if (exactMatchNode != null) {
       if (isLastPart) {
         return exactMatchNode;
@@ -117,12 +117,12 @@ class UrlTree<T> {
       return _find(exactMatchNode, parts.sublist(1));
     } else {
       // Look for a parameter node
-      for (_TreeNode<T> childNode in node.children.values) {
+      for (_TreeNode<T?> childNode in node.children.values as Iterable<_TreeNode<T?>>) {
         if (childNode is _ParameterTreeNode<T>) {
           if (isLastPart) {
             return childNode;
           }
-          final _TreeNode<T> resultNode = _find(childNode, parts.sublist(1));
+          final _TreeNode<T?>? resultNode = _find(childNode, parts.sublist(1)) as _TreeNode<T?>?;
           if (resultNode != null) {
             return resultNode;
           }

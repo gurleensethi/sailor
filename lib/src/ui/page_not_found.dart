@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/widgets.dart';
 import 'package:sailor/sailor.dart';
 
 class PageNotFound extends StatelessWidget {
   final String routeName;
-  final BaseArguments args;
-  final NavigationType navigationType;
+  final BaseArguments? args;
+  final NavigationType? navigationType;
 
   const PageNotFound({
-    Key key,
-    @required this.routeName,
+    Key? key,
+    required this.routeName,
     this.args,
     this.navigationType,
-  })  : assert(routeName != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +70,7 @@ class PageNotFound extends StatelessWidget {
     return _buildRow("NavigationType", navigationType?.toString() ?? "N/A");
   }
 
-  TableRow _buildRow(String column1, String column2) {
+  TableRow _buildRow(String? column1, String? column2) {
     assert(column1 != null);
     assert(column2 != null);
 
@@ -83,7 +82,7 @@ class PageNotFound extends StatelessWidget {
         Container(
           padding: EdgeInsets.all(8.0),
           child: Text(
-            column1,
+            column1!,
             style: TextStyle(
               fontWeight: FontWeight.w600,
             ),
@@ -91,7 +90,7 @@ class PageNotFound extends StatelessWidget {
         ),
         Container(
           padding: EdgeInsets.all(8.0),
-          child: Text(column2),
+          child: Text(column2!),
         ),
       ],
     );
