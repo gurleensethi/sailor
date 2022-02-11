@@ -4,7 +4,7 @@ import 'package:sailor/src/transitions/transiton_decorator.dart';
 
 class SlideLeftTransitionDecorator extends TransitionDecorator {
   SlideLeftTransitionDecorator({
-    TransitionComponent transitionComponent,
+    TransitionComponent? transitionComponent,
   }) : super(transitionComponent: transitionComponent);
 
   @override
@@ -18,7 +18,7 @@ class SlideLeftTransitionDecorator extends TransitionDecorator {
         begin: Offset(-1.0, 0.0),
         end: Offset.zero,
       ).animate(animation),
-      child: transitionComponent.buildChildWithTransition(
+      child: transitionComponent!.buildChildWithTransition(
           context, animation, secondaryAnimation, child),
     );
   }

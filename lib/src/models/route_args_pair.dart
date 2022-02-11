@@ -3,11 +3,11 @@ import 'package:sailor/sailor.dart';
 
 class RouteArgsPair {
   final String name;
-  final BaseArguments args;
-  final List<SailorTransition> transitions;
-  final Duration transitionDuration;
-  final Curve transitionCurve;
-  final CustomSailorTransition customTransition;
+  final BaseArguments? args;
+  final List<SailorTransition>? transitions;
+  final Duration? transitionDuration;
+  final Curve? transitionCurve;
+  final CustomSailorTransition? customTransition;
 
   RouteArgsPair(
     this.name, {

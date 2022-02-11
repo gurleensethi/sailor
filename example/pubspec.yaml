@@ -1,5 +1,6 @@
 name: example
 description: Example project for sailor
+publish_to: none
 
 version: 1.0.0+1
 

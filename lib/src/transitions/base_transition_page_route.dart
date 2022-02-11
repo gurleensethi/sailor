@@ -3,16 +3,16 @@ import 'package:sailor/sailor.dart';
 import 'package:sailor/src/transitions/transition_component.dart';
 
 class BaseTransitionPageRoute extends PageRouteBuilder {
-  final TransitionComponent transitionComponent;
-  final Duration duration;
-  final Curve curve;
-  final bool useDefaultPageTransition;
-  final CustomSailorTransition customTransition;
+  final TransitionComponent? transitionComponent;
+  final Duration? duration;
+  final Curve? curve;
+  final bool? useDefaultPageTransition;
+  final CustomSailorTransition? customTransition;
 
   BaseTransitionPageRoute({
-    this.transitionComponent,
-    @required WidgetBuilder builder,
-    @required RouteSettings settings,
+    required this.transitionComponent,
+    required WidgetBuilder? builder,
+    required RouteSettings? settings,
     this.duration,
     this.curve,
     this.useDefaultPageTransition = false,
@@ -20,7 +20,7 @@ class BaseTransitionPageRoute extends PageRouteBuilder {
   })  : assert(transitionComponent != null),
         assert(useDefaultPageTransition != null),
         super(
-            pageBuilder: (context, anim1, anim2) => builder(context),
+            pageBuilder: (context, anim1, anim2) => builder!(context),
             settings: settings);
 
   @override
@@ -28,11 +28,11 @@ class BaseTransitionPageRoute extends PageRouteBuilder {
       Animation<double> secondaryAnimation, Widget child) {
     if (this.customTransition != null) {
       return this
-          .customTransition
+          .customTransition!
           .buildTransition(context, animation, secondaryAnimation, child);
     }
 
-    if (this.useDefaultPageTransition) {
+    if (useDefaultPageTransition!) {
       return Theme.of(context).pageTransitionsTheme.buildTransitions(
           this, context, animation, secondaryAnimation, child);
     }
@@ -42,7 +42,7 @@ class BaseTransitionPageRoute extends PageRouteBuilder {
       curve: this.curve ?? Curves.linear,
     );
 
-    return transitionComponent.buildChildWithTransition(
+    return transitionComponent!.buildChildWithTransition(
         context, curvedAnimation, secondaryAnimation, child);
   }
 

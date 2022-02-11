@@ -4,7 +4,7 @@ import 'package:sailor/src/transitions/transiton_decorator.dart';
 
 class FadeInTransitionDecorator extends TransitionDecorator {
   FadeInTransitionDecorator({
-    TransitionComponent transitionComponent,
+    TransitionComponent? transitionComponent,
   }) : super(transitionComponent: transitionComponent);
 
   @override
@@ -15,7 +15,7 @@ class FadeInTransitionDecorator extends TransitionDecorator {
       Widget child) {
     return FadeTransition(
       opacity: animation,
-      child: transitionComponent.buildChildWithTransition(
+      child: transitionComponent!.buildChildWithTransition(
           context, animation, secondaryAnimation, child),
     );
   }

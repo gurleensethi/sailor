@@ -5,20 +5,20 @@ import 'package:sailor/src/transitions/custom_sailor_transition.dart';
 import 'package:sailor/src/transitions/sailor_transition.dart';
 
 class ArgumentsWrapper {
-  final BaseArguments baseArguments;
-  final List<SailorTransition> transitions;
-  final Duration transitionDuration;
-  final Curve transitionCurve;
-  final Map<String, dynamic> params;
+  final BaseArguments? baseArguments;
+  final List<SailorTransition>? transitions;
+  final Duration? transitionDuration;
+  final Curve? transitionCurve;
+  final Map<String, dynamic>? params;
 
   /// Route params that are initially defined for the Route.
   /// Note: These are needed here, because user must be able to retrieve
   /// params from within the launched route. Since the only thing available
   /// from inside a launched route are arguments, these paramters are provided
   /// along with the arguments.
-  final Map<String, SailorParam> routeParams;
+  final Map<String, SailorParam>? routeParams;
 
-  final CustomSailorTransition customTransition;
+  final CustomSailorTransition? customTransition;
 
   ArgumentsWrapper({
     this.baseArguments,
@@ -31,20 +31,20 @@ class ArgumentsWrapper {
   });
 
   ArgumentsWrapper copyWith({
-    BaseArguments baseArguments,
-    List<SailorTransition> transitions,
-    Duration transitionDuration,
-    Curve transitionCurve,
-    List<SailorParam> params,
-    Map<String, SailorParam> routeParams,
-    CustomSailorTransition customTransition,
+    BaseArguments? baseArguments,
+    List<SailorTransition>? transitions,
+    Duration? transitionDuration,
+    Curve? transitionCurve,
+    List<SailorParam>? params,
+    Map<String, SailorParam>? routeParams,
+    CustomSailorTransition? customTransition,
   }) {
     return ArgumentsWrapper(
       baseArguments: baseArguments ?? this.baseArguments,
       transitions: transitions ?? this.transitions,
       transitionDuration: transitionDuration ?? this.transitionDuration,
       transitionCurve: transitionCurve ?? this.transitionCurve,
-      params: params ?? this.params,
+      params: params as Map<String, dynamic>? ?? this.params,
       routeParams: routeParams ?? this.routeParams,
       customTransition: customTransition ?? this.customTransition,
     );

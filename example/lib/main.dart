@@ -33,7 +33,7 @@ class Home extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            RaisedButton(
+            ElevatedButton(
               child: Text('Open Second Page'),
               onPressed: () async {
                 final response = await Routes.sailor.navigate<bool>(
@@ -41,16 +41,16 @@ class Home extends StatelessWidget {
                   transitions: [
                     SailorTransition.slide_from_top,
                   ],
-                  customTransition: MyCustomTransition(),
+                  // customTransition: MyCustomTransition(),
                   params: {
-                    'id': null,
+                    'id': 1,
                   },
                 );
 
                 print("Response from SecondPage: $response");
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Open Multi Page (Second and Third)'),
               onPressed: () async {
                 final responses = await Routes.sailor.navigateMultiple([
@@ -70,31 +70,31 @@ class Home extends StatelessWidget {
                 print("Third Page Response ${responses[2]}");
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Push Replace Page'),
               onPressed: () async {
                 Routes.sailor.navigate("/pushReplacePage");
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Print navigation stack!'),
               onPressed: () {
                 Routes.sailor.navigationStackObserver.prettyPrintStack();
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Push Replace Page'),
               onPressed: () async {
                 Routes.sailor.navigate("/pushReplacePage");
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Push Replace Page'),
               onPressed: () async {
                 Routes.sailor.navigate("/pushReplacePage");
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Print navigation stack!'),
               onPressed: () {
                 Routes.sailor.navigationStackObserver.prettyPrintStack();
@@ -129,13 +129,13 @@ class SecondPage extends StatelessWidget {
           children: <Widget>[
             Text(args?.text ?? 'Second Page'),
             Text("Param('id'): $id"),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Close Page'),
               onPressed: () {
                 Routes.sailor.pop(true);
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Print navigation stack!'),
               onPressed: () {
                 Routes.sailor.navigationStackObserver.prettyPrintStack();
@@ -168,13 +168,13 @@ class ThirdPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text("Count from args is :${args?.count}"),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Close Page'),
               onPressed: () {
                 Routes.sailor.pop(10);
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Print navigation stack!'),
               onPressed: () {
                 Routes.sailor.navigationStackObserver.prettyPrintStack();
@@ -198,7 +198,7 @@ class PushReplacePage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            RaisedButton(
+            ElevatedButton(
               child: Text('Push Replace'),
               onPressed: () {
                 Routes.sailor.navigate(
@@ -207,7 +207,7 @@ class PushReplacePage extends StatelessWidget {
                 );
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Push Unitl First and Replace'),
               onPressed: () {
                 Routes.sailor.navigate(
@@ -217,7 +217,7 @@ class PushReplacePage extends StatelessWidget {
                 );
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Print navigation stack!'),
               onPressed: () {
                 Routes.sailor.navigationStackObserver.prettyPrintStack();
@@ -313,6 +313,6 @@ class CustomRouteGuard extends SailorRouteGuard {
     BaseArguments args,
     ParamMap paramMap,
   ) async {
-    return false;
+    return true;
   }
 }

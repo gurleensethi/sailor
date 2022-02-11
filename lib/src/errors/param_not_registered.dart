@@ -1,12 +1,12 @@
-import 'package:meta/meta.dart';
+// import 'package:meta/meta.dart';
 
 class ParamNotRegisteredError extends Error {
   final String paramKey;
-  final String routeName;
+  final String? routeName;
 
   ParamNotRegisteredError({
-    @required this.routeName,
-    @required this.paramKey,
+    required this.routeName,
+    required this.paramKey,
   });
 
   @override

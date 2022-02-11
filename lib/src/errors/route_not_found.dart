@@ -1,10 +1,10 @@
-import 'package:meta/meta.dart';
+// import 'package:meta/meta.dart';
 
 class RouteNotFoundError extends Error {
   final String name;
 
   RouteNotFoundError({
-    @required this.name,
+    required this.name,
   });
 
   @override

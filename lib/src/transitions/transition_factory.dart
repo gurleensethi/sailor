@@ -8,17 +8,17 @@ import 'package:sailor/src/transitions/decorators/slide_left_transition_decorato
 import 'package:sailor/src/transitions/decorators/slide_right_transition_decorator.dart';
 import 'package:sailor/src/transitions/decorators/slide_top_transition_decorator.dart';
 import 'package:sailor/src/transitions/decorators/zoom_in_transition_decorator.dart';
-import 'package:sailor/src/transitions/sailor_transition.dart';
+// import 'package:sailor/src/transitions/sailor_transition.dart';
 import 'package:sailor/src/transitions/transition_component.dart';
 
 class TransitionFactory {
   static PageRoute buildTransition({
-    RouteSettings settings,
-    WidgetBuilder builder,
-    Duration duration,
-    Curve curve,
-    List<SailorTransition> transitions,
-    CustomSailorTransition customTransition,
+    RouteSettings? settings,
+    WidgetBuilder? builder,
+    Duration? duration,
+    Curve? curve,
+    List<SailorTransition>? transitions,
+    CustomSailorTransition? customTransition,
   }) {
     TransitionComponent transitionComponent = ConcreteTransitionComponent();
 
